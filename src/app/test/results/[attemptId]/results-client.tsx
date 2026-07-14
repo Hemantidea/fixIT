@@ -142,10 +142,53 @@ export default function ResultsClient({ attempt, history }: ResultsClientProps) 
           <div className="flex items-center space-x-8">
             {/* Unified Logo */}
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 border-2 border-brand-orange flex items-center justify-center relative rounded-sm">
-                <span className="text-brand-blue font-bold text-sm">IT</span>
-                <div className="absolute top-0 right-0 w-2 h-2 bg-brand-orange" />
-              </div>
+              <svg 
+                className="w-8 h-8 flex-shrink-0" 
+                viewBox="0 0 100 100" 
+                fill="none" 
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <defs>
+                  {/* Diagonal Gradient matching the Outer Frame */}
+                  <linearGradient id="frameGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#FF6B00" />
+                    <stop offset="35%" stopColor="#FF8C00" />
+                    <stop offset="65%" stopColor="#0070F3" />
+                    <stop offset="100%" stopColor="#0056B3" />
+                  </linearGradient>
+
+                  {/* Gradient for central checkmark */}
+                  <linearGradient id="checkGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#FF6B00" />
+                    <stop offset="100%" stopColor="#FFA600" />
+                  </linearGradient>
+                </defs>
+
+                {/* 1. Main Document Outline Frame */}
+                <path 
+                  d="M 58 15 L 38 15 C 28 15 23 23 23 35 L 23 68 C 23 80 28 85 38 85 L 62 85 C 72 85 77 80 77 68 L 77 34" 
+                  stroke="url(#frameGrad)" 
+                  strokeWidth="9" 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round"
+                />
+
+                {/* 2. Folded Corner (Top Right) */}
+                <path 
+                  d="M 64 15 L 75 26 C 76 27 76 28 75 28 L 65 28 C 64 28 64 27 64 26 Z" 
+                  fill="#FFB800" 
+                />
+
+                {/* 3. Central Checkmark */}
+                <path 
+                  d="M 36 53 L 47 64 L 68 39" 
+                  stroke="url(#checkGrad)" 
+                  strokeWidth="9" 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round"
+                />
+              </svg>
+
               <span className="text-xl font-bold tracking-tight text-brand-navy dark:text-white">
                 fix<span className="text-brand-blue">IT</span>
               </span>

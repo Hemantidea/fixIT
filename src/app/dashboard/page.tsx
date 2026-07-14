@@ -363,46 +363,6 @@ export default function Dashboard() {
           )}
         </section>
 
-       {/* QUICK PLATFORM GUIDE */}
-        <section className="border border-border p-6 rounded-sm bg-card space-y-6">
-            <h3 className="font-bold text-sm uppercase tracking-wide border-b border-border pb-3 text-muted-foreground">
-              Quick Platform Guide
-            </h3>
-          <div className="border-t border-border pt-6 space-y-3">
-            <h4 className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">AI Generator Toolkit Reference</h4>
-            <CodePlayground />
-          </div>
-          <div className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs leading-relaxed text-muted-foreground">
-              <div className="space-y-2">
-                <h4 className="font-bold text-foreground text-xs">1. Generate & Import</h4>
-                <p>
-                  Use an external LLM to generate tests matching the exact JSON schema schemaVersion 1.0.0. Drag-and-drop the generated file or paste the text directly above, validate the inputs offline, and click import to save to Neon.
-                </p>
-              </div>
-              <div className="space-y-2">
-                <h4 className="font-bold text-foreground text-xs">2. Dynamic Testing & Caching</h4>
-                <p>
-                  Start your assessment in secure, programmatic fullscreen mode. The engine tracks overall test durations, elapsed times spent per question, active review flags, and bookmarks. Unsubmitted sessions are cached locally.
-                </p>
-              </div>
-              <div className="space-y-2">
-                <h4 className="font-bold text-foreground text-xs">3. Grading & Scoring</h4>
-                <p>
-                  MCQs evaluate matching keys, MSQs check exact selections, and Numericals check float ranges. Point calculations process relative weight marks and negative penalties securely before saving to the database.
-                </p>
-              </div>
-              <div className="space-y-2">
-                <h4 className="font-bold text-foreground text-xs">4. Performance Reporting</h4>
-                <p>
-                  View accuracy metrics, topic distributions, and historical attempt timelines. Export individual reports to CSV or print clean physical reports directly from your browser.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Embedded Node.js-Style Code Copier Panel right under the Guide */}
-        </section>
 
         {/* LIST SECTION: Catalog Listings */}
         <section className="space-y-6">
@@ -500,6 +460,46 @@ export default function Dashboard() {
             </div>
           )}
         </section>
+                              {/* QUICK PLATFORM GUIDE */}
+                               <section className="border border-border p-6 rounded-sm bg-card space-y-6">
+                                   <h3 className="font-bold text-sm uppercase tracking-wide border-b border-border pb-3 text-muted-foreground">
+                                     Quick Platform Guide
+                                   </h3>
+                                 <div className="border-t border-border pt-6 space-y-3">
+                                   <h4 className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">AI Generator Toolkit Reference</h4>
+                                   <CodePlayground />
+                                 </div>
+                                 <div className="space-y-4">
+                                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs leading-relaxed text-muted-foreground">
+                                     <div className="space-y-2">
+                                       <h4 className="font-bold text-foreground text-xs">1. Generate & Import</h4>
+                                       <p>
+                                         Use an external LLM to generate tests matching the exact JSON schema schemaVersion 1.0.0. Drag-and-drop the generated file or paste the text directly above, validate the inputs offline, and click import to save to Neon.
+                                       </p>
+                                     </div>
+                                     <div className="space-y-2">
+                                       <h4 className="font-bold text-foreground text-xs">2. Dynamic Testing & Caching</h4>
+                                       <p>
+                                         Start your assessment in secure, programmatic fullscreen mode. The engine tracks overall test durations, elapsed times spent per question, active review flags, and bookmarks. Unsubmitted sessions are cached locally.
+                                       </p>
+                                     </div>
+                                     <div className="space-y-2">
+                                       <h4 className="font-bold text-foreground text-xs">3. Grading & Scoring</h4>
+                                       <p>
+                                         MCQs evaluate matching keys, MSQs check exact selections, and Numericals check float ranges. Point calculations process relative weight marks and negative penalties securely before saving to the database.
+                                       </p>
+                                     </div>
+                                     <div className="space-y-2">
+                                       <h4 className="font-bold text-foreground text-xs">4. Performance Reporting</h4>
+                                       <p>
+                                         View accuracy metrics, topic distributions, and historical attempt timelines. Export individual reports to CSV or print clean physical reports directly from your browser.
+                                       </p>
+                                     </div>
+                                   </div>
+                                 </div>
+                       
+                                 {/* Embedded Node.js-Style Code Copier Panel right under the Guide */}
+                               </section>
       </main>
 
       {/* Footer */}
