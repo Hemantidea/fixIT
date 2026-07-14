@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Prevent Next.js Turbopack from bundling Prisma engine files
+  serverExternalPackages: ["@prisma/client"],
 };
 
 export default nextConfig;

@@ -1,26 +1,62 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@theme {
+  --color-brand-navy: #0F172A;
+  --color-brand-blue: #0070F3;
+  --color-brand-orange: #FF6B00;
 
-@theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --background: #FFFFFF;
+  --foreground: #0F172A;
+  --card: #F8FAFC;
+  --card-foreground: #0F172A;
+  
+  --border: #E2E8F0;
+  --input: #E2E8F0;
+  --ring: #0070F3;
+  
+  --muted: #F1F5F9;
+  --muted-foreground: #64748B;
+}
+
+.dark {
+  /* Softer charcoal-slate background to reduce high contrast eye-strain */
+  --background: #0B0F17;
+  --foreground: #CBD5E1; /* Soft gray text instead of pure white */
+  --card: #151C2C;       /* Soft card background */
+  --card-foreground: #E2E8F0;
+  
+  --border: #1E293B;     /* Softer slate borders */
+  --input: #1E293B;
+  --ring: #3B82F6;
+  
+  --muted: #1E293B;
+  --muted-foreground: #64748B;
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*, *::before, *::after {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 75ms;
 }

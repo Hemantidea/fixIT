@@ -1,0 +1,109 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String     @id @default(uuid())
+  email     String     @unique
+  name      String?
+  createdAt DateTime   @default(now())
+  attempts  Attempt[]
+  bookmarks Bookmark[]
+  accounts  Account[]
+  sessions  Session[]
+}
+
+model Test {
+  id            String     @id @default(uuid())
+  title         String
+  description   String
+  timeLimit     Int // in minutes
+  schemaVersion String
+  rawJson       Json // Natively stores verified test payload as PostgreSQL JSON
+  createdAt     DateTime   @default(now())
+  attempts      Attempt[]
+  bookmarks     Bookmark[]
+}
+
+model Attempt {
+  id             String            @id @default(uuid())
+  testId         String
+  userId         String
+  score          Float
+  totalQuestions Int
+  correctCount   Int
+  incorrectCount Int
+  timeSpent      Int // elapsed time in seconds
+  completedAt    DateTime          @default(now())
+  test           Test              @relation(fields: [testId], references: [id], onDelete: Cascade)
+  user           User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  responses      QuestionAttempt[]
+}
+
+model QuestionAttempt {
+  id           String  @id @default(uuid())
+  attemptId    String
+  questionId   String
+  selected     Json // Stores array of answers or specific values as native JSON
+  timeSpent    Int // seconds spent specifically on this question
+  isCorrect    Boolean
+  isBookmarked Boolean @default(false)
+  attempt      Attempt @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+}
+
+model Bookmark {
+  id         String   @id @default(uuid())
+  userId     String
+  testId     String
+  questionId String
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  test       Test     @relation(fields: [testId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, testId, questionId])
+}
+
+model Account {
+  id                String  @id @default(uuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(uuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
