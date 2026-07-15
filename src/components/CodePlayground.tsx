@@ -158,8 +158,8 @@ C. NUMERICAL Question Node:
             onClick={() => setActiveTab("json")}
             className={`px-4 py-3 border-r border-l border-border transition-colors cursor-pointer ${
               activeTab === "json"
-                ? "bg-[#0B0F17]/40 dark:bg-[#0B0F17]/10 text-emerald-600 dark:text-emerald-400 border-b-2 border-b-emerald-500"
-                : "text-slate-500 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-[#1f2937]"
+                ? "bg-slate-100/70 dark:bg-slate-800/20 text-emerald-600 dark:text-emerald-400 border-b-2 border-b-emerald-500"
+                : "text-slate-600 dark:text-slate-400 hover:bg-slate-100/70 dark:hover:bg-slate-800/30"
             }`}
           >
             JSON Schema
@@ -168,8 +168,8 @@ C. NUMERICAL Question Node:
             onClick={() => setActiveTab("prompt")}
             className={`px-4 py-3 border-r border-border transition-colors cursor-pointer ${
               activeTab === "prompt"
-                ? "bg-[#0B0F17]/40 dark:bg-[#0B0F17]/10 text-emerald-600 dark:text-emerald-400 border-b-2 border-b-emerald-500"
-                : "text-slate-500 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-[#1f2937]"
+                ? "bg-slate-100/70 dark:bg-slate-800/20 text-emerald-600 dark:text-emerald-400 border-b-2 border-b-emerald-500"
+                : "text-slate-600 dark:text-slate-400 hover:bg-slate-100/70 dark:hover:bg-slate-800/30"
             }`}
           >
             AI Prompt rules

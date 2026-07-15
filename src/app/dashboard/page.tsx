@@ -7,6 +7,7 @@ import Link from "next/link";
 import CopyButton from "../../components/CopyButton";
 import CodePlayground from "../../components/CodePlayground";
 
+
 interface AttemptItem {
   id: string;
   score: number;
@@ -35,6 +36,7 @@ export default function Dashboard() {
   const [pendingUploadJson, setPendingUploadJson] = useState<string | null>(null);
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [menuOpen, setMenuOpen] = useState(false); // Mobile menu toggle state
 
   const boilerplateJson = `{
   "schemaVersion": "1.0.0",
@@ -173,10 +175,13 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col justify-between">
       {/* Header */}
-      <header className="border-b border-border bg-background py-4 px-4 sm:px-6 sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto flex items-center justify-between gap-2">
-          <div className="flex items-center space-x-4 sm:space-x-8 min-w-0">
-            <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
+      <header className="border-b border-border bg-background py-4 px-4 sm:px-6 sticky top-0 z-20">
+        <div className="max-w-6xl mx-auto flex items-center justify-between relative">
+          
+          {/* Left-hand Container: Locks Logo and Nav Links together on the left */}
+          <div className="flex items-center gap-4 sm:gap-6 flex-shrink-0 min-w-0">
+            {/* Unified Logo */}
+            <Link href="/dashboard" className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0 cursor-pointer">
               <svg 
                 className="w-7 h-7 sm:w-8 sm:h-8 flex-shrink-0" 
                 viewBox="0 0 100 100" 
@@ -217,10 +222,10 @@ export default function Dashboard() {
               <span className="text-lg sm:text-xl font-bold tracking-tight text-brand-navy dark:text-white">
                 fix<span className="text-brand-blue">IT</span>
               </span>
-            </div>
+            </Link>
 
-            {/* Nav Links */}
-            <nav className="flex space-x-3 sm:space-x-6 text-[11px] sm:text-sm font-semibold">
+            {/* Unified Nav Links */}
+            <nav className="flex space-x-3 sm:space-x-5 text-[11px] sm:text-sm font-semibold flex-shrink-0">
               <Link href="/dashboard" className="text-brand-blue transition-colors">
                 Dashboard
               </Link>
@@ -230,30 +235,73 @@ export default function Dashboard() {
             </nav>
           </div>
 
-          <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
+          {/* Right: Actions */}
+          <div className="flex items-center space-x-2 sm:space-x-3">
             {/* Sun / Moon Theme Switcher */}
             <button
               onClick={toggleTheme}
-              className="p-1.5 sm:p-2 border border-border rounded-sm hover:bg-muted transition-colors cursor-pointer"
+              className="p-2 border border-border rounded-sm hover:bg-muted transition-colors cursor-pointer"
               title="Toggle Theme"
             >
               {theme === "light" ? (
-                <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-brand-blue" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 text-brand-blue" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.301-2.6.841-3.738A9.716 9.716 0 003 11.25C3 16.635 7.365 21 12.75 21a9.716 9.716 0 009.002-5.998z" />
                 </svg>
               ) : (
-                <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m0 13.5V21M4.22 4.22l1.59 1.59m12.38 12.38l1.59 1.59M3 12h2.25m13.5 0H21m-16.78 6.18l1.59-1.59M17.78 5.64l1.59 1.59M12 7.5a4.5 4.5 0 110 9 4.5 4.5 0 010-9z" />
                 </svg>
               )}
             </button>
+
+            {/* Desktop-only Log Out (Hidden on mobile) */}
             <button
               onClick={() => handleSignOut()}
-              className="bg-brand-navy dark:bg-slate-800 text-white hover:bg-slate-800 dark:hover:bg-slate-700 font-medium text-[10px] sm:text-xs px-2 py-1.5 sm:px-2.5 sm:py-1.5 rounded-sm transition-colors cursor-pointer"
+              className="hidden md:inline-block bg-brand-navy dark:bg-slate-800 text-white hover:bg-slate-800 dark:hover:bg-slate-700 font-medium text-xs px-2.5 py-1.5 rounded-sm transition-colors cursor-pointer"
             >
               Log Out
             </button>
+
+            {/* Mobile Hamburger Menu Toggle Button */}
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="md:hidden p-2 border border-border rounded-sm hover:bg-muted text-muted-foreground transition-colors cursor-pointer"
+              title="Toggle Menu"
+            >
+              {menuOpen ? (
+                // Clean SVG X Close Icon
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              ) : (
+                // Clean SVG 3-Bar Hamburger Icon
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              )}
+            </button>
           </div>
+
+          {/* Vertical Collapsible Mobile Menu Panel (Zero Sideways Shift) */}
+          {menuOpen && (
+            <div className="absolute top-16 left-0 w-full bg-card border-b border-border py-4 px-6 flex flex-col space-y-4 md:hidden z-30 shadow-lg">
+              <Link href="/dashboard" onClick={() => setMenuOpen(false)} className="text-brand-blue text-sm font-bold">
+                Dashboard
+              </Link>
+              <Link href="/history" onClick={() => setMenuOpen(false)} className="text-muted-foreground hover:text-foreground text-sm font-semibold">
+                History
+              </Link>
+              <button
+                onClick={() => {
+                  setMenuOpen(false);
+                  handleSignOut();
+                }}
+                className="w-full bg-brand-navy dark:bg-slate-800 text-white text-xs font-semibold py-2 rounded-sm text-center"
+              >
+                Log Out
+              </button>
+            </div>
+          )}
         </div>
       </header>
 
@@ -367,46 +415,7 @@ export default function Dashboard() {
             </div>
           )}
         </section>
-
-        {/* QUICK PLATFORM GUIDE */}
-        <section className="border border-border p-6 rounded-sm bg-card space-y-6">
-          <h3 className="font-bold text-sm uppercase tracking-wide border-b border-border pb-3 text-muted-foreground">
-            Quick Platform Guide
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs leading-relaxed text-muted-foreground">
-            <div className="space-y-2">
-              <h4 className="font-bold text-foreground text-xs">1. Generate & Import</h4>
-              <p>
-                Use an external LLM to generate tests matching the exact JSON schema schemaVersion 1.0.0. Drag-and-drop the generated file or paste the text directly above, validate the inputs offline, and click import to save to Neon.
-              </p>
-            </div>
-            <div className="space-y-2">
-              <h4 className="font-bold text-foreground text-xs">2. Dynamic Testing & Caching</h4>
-              <p>
-                Start your assessment in secure, programmatic fullscreen mode. The engine tracks overall test durations, elapsed times spent per question, active review flags, and bookmarks. Unsubmitted sessions are cached locally.
-              </p>
-            </div>
-            <div className="space-y-2">
-              <h4 className="font-bold text-foreground text-xs">3. Grading & Scoring</h4>
-              <p>
-                MCQs evaluate matching keys, MSQs check exact selections, and Numericals check float ranges. Point calculations process relative weight marks and negative penalties securely before saving to the database.
-              </p>
-            </div>
-            <div className="space-y-2">
-              <h4 className="font-bold text-foreground text-xs">4. Performance Reporting</h4>
-              <p>
-                View accuracy metrics, topic distributions, and historical attempt timelines. Export individual reports to CSV or print clean physical reports directly from your browser.
-              </p>
-            </div>
-          </div>
-
-          <div className="border-t border-border pt-6 space-y-3">
-            <h4 className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">AI Generator Toolkit Reference</h4>
-            <CodePlayground />
-          </div>
-        </section>
-
-        {/* LIST SECTION: Catalog Listings */}
+                {/* LIST SECTION: Catalog Listings */}
         <section className="space-y-6">
           <div className="space-y-1">
             <h2 className="text-2xl font-bold tracking-tight">Your Assessments</h2>
@@ -548,6 +557,43 @@ export default function Dashboard() {
               })}
             </div>
           )}
+        </section>
+        {/* QUICK PLATFORM GUIDE */}
+        <section className="border border-border p-6 rounded-sm bg-card space-y-6">
+          <h3 className="font-bold text-sm uppercase tracking-wide border-b border-border pb-3 text-muted-foreground">
+            Quick Platform Guide
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs leading-relaxed text-muted-foreground">
+            <div className="space-y-2">
+              <h4 className="font-bold text-foreground text-xs">1. Generate & Import</h4>
+              <p>
+                Use an external LLM to generate tests matching the exact JSON schema schemaVersion 1.0.0. Drag-and-drop the generated file or paste the text directly above, validate the inputs offline, and click import to save to Neon.
+              </p>
+            </div>
+            <div className="space-y-2">
+              <h4 className="font-bold text-foreground text-xs">2. Dynamic Testing & Caching</h4>
+              <p>
+                Start your assessment in secure, programmatic fullscreen mode. The engine tracks overall test durations, elapsed times spent per question, active review flags, and bookmarks. Unsubmitted sessions are cached locally.
+              </p>
+            </div>
+            <div className="space-y-2">
+              <h4 className="font-bold text-foreground text-xs">3. Grading & Scoring</h4>
+              <p>
+                MCQs evaluate matching keys, MSQs check exact selections, and Numericals check float ranges. Point calculations process relative weight marks and negative penalties securely before saving to the database.
+              </p>
+            </div>
+            <div className="space-y-2">
+              <h4 className="font-bold text-foreground text-xs">4. Performance Reporting</h4>
+              <p>
+                View accuracy metrics, topic distributions, and historical attempt timelines. Export individual reports to CSV or print clean physical reports directly from your browser.
+              </p>
+            </div>
+          </div>
+
+          <div className="border-t border-border pt-6 space-y-3">
+            <h4 className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">AI Generator Toolkit Reference</h4>
+            <CodePlayground />
+          </div>
         </section>
       </main>
 

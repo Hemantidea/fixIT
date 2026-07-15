@@ -37,8 +37,10 @@ export default async function HistoryPage() {
       {/* Global Responsive Navigation Bar */}
       <header className="border-b border-border bg-background py-4 px-3 sm:px-6 sticky top-0 z-10">
         <div className="max-w-6xl mx-auto flex items-center justify-between gap-2">
-          <div className="flex items-center space-x-4 sm:space-x-8 min-w-0">
-            <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
+          {/* Left-hand Container: Locks Logo and Nav Links together on the left */}
+          <div className="flex items-center gap-4 sm:gap-6 flex-shrink-0 min-w-0">
+            {/* Unified Logo */}
+            <Link href="/dashboard" className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0 cursor-pointer">
               <svg 
                 className="w-7 h-7 sm:w-8 sm:h-8 flex-shrink-0" 
                 viewBox="0 0 100 100" 
@@ -79,10 +81,10 @@ export default async function HistoryPage() {
               <span className="text-lg sm:text-xl font-bold tracking-tight text-brand-navy dark:text-white">
                 fix<span className="text-brand-blue">IT</span>
               </span>
-            </div>
-            
-            {/* Nav Links: Fully responsive and visible on mobile viewports */}
-            <nav className="flex space-x-3 sm:space-x-6 text-[11px] sm:text-sm font-semibold">
+            </Link>
+
+            {/* Unified Nav Links */}
+            <nav className="flex space-x-3 sm:space-x-5 text-[11px] sm:text-sm font-semibold flex-shrink-0">
               <Link href="/dashboard" className="text-muted-foreground hover:text-foreground transition-colors">
                 Dashboard
               </Link>

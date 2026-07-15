@@ -35,7 +35,7 @@ export default function LandingPage() {
       <BackgroundEffects />
 
       {/* 3. Global Top Informative Banner with Copy Options */}
-      <TopBanner />
+      {/* <TopBanner /> */}
 
       {/* 4. Global Navigation Header */}
       <Header />

@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { signIn, signOut } from "next-auth/react";
 
 interface AttemptHistoryItem {
   id: string;
@@ -63,6 +64,7 @@ export default function ResultsClient({ attempt, history }: ResultsClientProps) 
 
   const totalQuestionsCount = questions.length;
   const unattemptedCount = totalQuestionsCount - attempt.correctCount - attempt.incorrectCount;
+  const [menuOpen, setMenuOpen] = useState(false); // New state to toggle mobile actions
 
   const topicStats: Record<string, { total: number; correct: number }> = {};
   questions.forEach((q: any) => {
@@ -214,14 +216,15 @@ export default function ResultsClient({ attempt, history }: ResultsClientProps) 
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col justify-between print:bg-white print:text-black">
-      {/* Header */}
-      {/* Unified Global Navigation Bar */}
-      {/* Unified Global Navigation Bar */}
-      <header className="border-b border-border bg-background py-4 px-3 sm:px-6 sticky top-0 z-10 print:hidden">
-        <div className="max-w-6xl mx-auto flex items-center justify-between gap-2">
-          <div className="flex items-center space-x-4 sm:space-x-8 min-w-0">
-            {/* Unified Logo */}
-            <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
+      {/* Unified Global Navigation Bar (Now with Mobile Hamburger Panel) */}
+      {/* Unified Global Navigation Bar (Syntactically Corrected) */}
+      <header className="border-b border-border bg-background py-4 px-4 sm:px-6 sticky top-0 z-10 print:hidden">
+        <div className="max-w-6xl mx-auto flex items-center justify-between relative">
+          
+          {/* 1. Left-hand Container: Locks Logo and Nav Links together on the left (no middle drift) */}
+          <div className="flex items-center gap-4 sm:gap-6 flex-shrink-0 min-w-0">
+            {/* Unified Logo wrapped as link */}
+            <Link href="/dashboard" className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0 cursor-pointer">
               <svg 
                 className="w-7 h-7 sm:w-8 sm:h-8 flex-shrink-0" 
                 viewBox="0 0 100 100" 
@@ -262,35 +265,36 @@ export default function ResultsClient({ attempt, history }: ResultsClientProps) 
               <span className="text-lg sm:text-xl font-bold tracking-tight text-brand-navy dark:text-white">
                 fix<span className="text-brand-blue">IT</span>
               </span>
-            </div>
+            </Link>
 
-            {/* Unified Nav Links: Fully responsive and visible on mobile viewports */}
-            <nav className="flex space-x-3 sm:space-x-6 text-[11px] sm:text-sm font-semibold">
-              <Link href="/dashboard" className="text-muted-foreground hover:text-foreground transition-colors">
+            {/* Unified Nav Links */}
+            <nav className="flex space-x-3 sm:space-x-5 text-[11px] sm:text-sm font-semibold flex-shrink-0">
+              <Link href="/dashboard" className="text-brand-blue transition-colors">
                 Dashboard
               </Link>
-              <Link href="/history" className="text-muted-foreground hover:text-foreground transition-colors">
+              <Link href="/history" className="text-muted-foreground hover:text-foreground transition-colors font-medium">
                 History
               </Link>
             </nav>
           </div>
 
-          {/* Action Controllers */}
+          {/* 2. Right-hand Actions Container (Theme, desktop controls, or mobile triggers) */}
           <div className="flex items-center space-x-1.5 sm:space-x-3 flex-shrink-0">
+            {/* Desktop Only Buttons (Hidden on mobile) */}
             <button
               onClick={exportToCSV}
-              className="px-2 py-1.5 sm:px-2.5 sm:py-1.5 border border-border text-[10px] sm:text-xs rounded-sm hover:bg-muted text-muted-foreground transition-colors cursor-pointer font-medium"
+              className="hidden md:inline-block px-2.5 py-1.5 border border-border text-xs rounded-sm hover:bg-muted text-muted-foreground transition-colors cursor-pointer font-medium"
             >
-              CSV
+              Export CSV
             </button>
             <button
               onClick={() => window.print()}
-              className="px-2 py-1.5 sm:px-2.5 sm:py-1.5 border border-border text-[10px] sm:text-xs rounded-sm hover:bg-muted text-muted-foreground transition-colors cursor-pointer font-medium"
+              className="hidden md:inline-block px-2.5 py-1.5 border border-border text-xs rounded-sm hover:bg-muted text-muted-foreground transition-colors cursor-pointer font-medium"
             >
-              Print
+              Print Report
             </button>
 
-            {/* Theme Toggle icon */}
+            {/* Theme Toggle Button (Always visible) */}
             <button
               onClick={toggleTheme}
               className="p-1.5 sm:p-2 border border-border rounded-sm hover:bg-muted transition-colors cursor-pointer"
@@ -306,7 +310,74 @@ export default function ResultsClient({ attempt, history }: ResultsClientProps) 
                 </svg>
               )}
             </button>
+
+            {/* Desktop Only Log Out Button (Hidden on mobile) */}
+            <button
+              onClick={() => signOut({ callbackUrl: "/" })}
+              className="hidden md:inline-block bg-brand-navy dark:bg-slate-800 text-white hover:bg-slate-800 dark:hover:bg-slate-700 font-medium text-xs px-2.5 py-1.5 rounded-sm transition-colors cursor-pointer"
+            >
+              Log Out
+            </button>
+
+            {/* Mobile Hamburger Toggle Button (Visible only on mobile) */}
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="md:hidden p-2 border border-border rounded-sm hover:bg-muted text-muted-foreground transition-colors cursor-pointer"
+              title="Toggle Menu"
+            >
+              {menuOpen ? (
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              ) : (
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              )}
+            </button>
           </div>
+
+          {/* 3. Vertical Mobile Dropdown Panel */}
+          {menuOpen && (
+            <div className="absolute top-16 left-0 w-full bg-card border-b border-border py-4 px-6 flex flex-col space-y-4 md:hidden z-30 shadow-lg select-none">
+              {/* Unified Nav Links: Hidden on mobile viewports, visible on desktop (md) and wider */}
+            <nav className="hidden md:flex space-x-6 text-sm font-semibold flex-shrink-0">
+              <Link href="/dashboard" className="text-brand-blue transition-colors">
+                Dashboard
+              </Link>
+              <Link href="/history" className="text-muted-foreground hover:text-foreground transition-colors font-medium">
+                History
+              </Link>
+            </nav>
+              <button
+                onClick={() => {
+                  setMenuOpen(false);
+                  exportToCSV();
+                }}
+                className="text-left text-muted-foreground hover:text-foreground text-sm font-semibold cursor-pointer"
+              >
+                Export CSV 📋
+              </button>
+              <button
+                onClick={() => {
+                  setMenuOpen(false);
+                  window.print();
+                }}
+                className="text-left text-muted-foreground hover:text-foreground text-sm font-semibold cursor-pointer"
+              >
+                Print Report 🖨️
+              </button>
+              <button
+                onClick={() => {
+                  setMenuOpen(false);
+                  signOut({ callbackUrl: "/" });
+                }}
+                className="w-full bg-brand-navy dark:bg-slate-800 text-white text-xs font-semibold py-2 rounded-sm text-center cursor-pointer"
+              >
+                Log Out
+              </button>
+            </div>
+          )}
         </div>
       </header>
 
@@ -362,26 +433,31 @@ export default function ResultsClient({ attempt, history }: ResultsClientProps) 
                 });
                 return (
                   <div 
-                    key={h.id} 
+                    key={h.id} // Fixed: Use h.id instead of attempt.id to prevent key duplication
                     className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 py-3 border-b border-border/40 last:border-0"
                   >
                     <div className="flex items-center space-x-3 min-w-0">
+                      {/* Fixed: Use history.length to calculate the descending attempt count */}
                       <span className={`w-5 h-5 flex-shrink-0 flex items-center justify-center rounded-full font-bold text-[10px] ${
                         isCurrent ? "bg-brand-blue text-white" : "bg-muted text-muted-foreground"
                       }`}>
-                        {index + 1}
+                        #{history.length - index}
                       </span>
-                      <span className={`truncate text-xs ${isCurrent ? "font-bold text-foreground" : "text-muted-foreground"}`}>
-                        Attempt on {formattedDate} {isCurrent && "(Current Attempt)"}
+                      <span 
+                        className={`truncate text-xs ${isCurrent ? "font-bold text-foreground" : "text-muted-foreground"}`}
+                        suppressHydrationWarning
+                      >
+                        Attempted on {formattedDate} {isCurrent && "(Current Attempt)"}
                       </span>
                     </div>
                     
-                    {/* Aligns details cleanly, preventing proportional unit wrapping */}
                     <div className="flex items-center space-x-4 font-mono text-[11px] sm:text-xs pl-8 sm:pl-0 flex-shrink-0 select-none">
                       <span className={`whitespace-nowrap ${isCurrent ? "font-bold text-brand-blue" : "text-muted-foreground"}`}>
+                        {/* Fixed: Use h.score to display the specific historical attempt's score */}
                         Score: <span style={{ fontVariantNumeric: "tabular-nums", fontFeatureSettings: '"tnum" 1' }}>{h.score}pts</span>
                       </span>
                       <span className="text-muted-foreground whitespace-nowrap">
+                        {/* Fixed: Use h.timeSpent to display the specific historical attempt's duration */}
                         Time: <span style={{ fontVariantNumeric: "tabular-nums", fontFeatureSettings: '"tnum" 1' }}>{formatSeconds(h.timeSpent)}</span>
                       </span>
                     </div>
