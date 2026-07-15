@@ -76,10 +76,6 @@ export default function HeroSection() {
       
       {/* Left Column */}
       <div className="lg:col-span-6 space-y-6">
-        <div className="inline-flex items-center space-x-2 border border-border/80 dark:border-border/40 bg-card/40 px-3 py-1 rounded-full text-[10px] sm:text-xs font-semibold tracking-wide text-brand-orange select-none animate-pulse">
-          <span>Offline-first diagnostic platform</span>
-          <span>🚀</span>
-        </div>
 
         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.1] text-brand-navy dark:text-white">
           Evaluate your <br className="hidden sm:inline" />
