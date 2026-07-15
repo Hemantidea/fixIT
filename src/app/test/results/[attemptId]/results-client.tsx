@@ -216,34 +216,30 @@ export default function ResultsClient({ attempt, history }: ResultsClientProps) 
     <div className="min-h-screen bg-background text-foreground flex flex-col justify-between print:bg-white print:text-black">
       {/* Header */}
       {/* Unified Global Navigation Bar */}
-      <header className="border-b border-border bg-background py-4 px-4 sm:px-6 sticky top-0 z-10 print:hidden">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <div className="flex items-center space-x-8">
+      {/* Unified Global Navigation Bar */}
+      <header className="border-b border-border bg-background py-4 px-3 sm:px-6 sticky top-0 z-10 print:hidden">
+        <div className="max-w-6xl mx-auto flex items-center justify-between gap-2">
+          <div className="flex items-center space-x-4 sm:space-x-8 min-w-0">
             {/* Unified Logo */}
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
               <svg 
-                className="w-8 h-8 flex-shrink-0" 
+                className="w-7 h-7 sm:w-8 sm:h-8 flex-shrink-0" 
                 viewBox="0 0 100 100" 
                 fill="none" 
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <defs>
-                  {/* Diagonal Gradient matching the Outer Frame */}
                   <linearGradient id="frameGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" stopColor="#FF6B00" />
                     <stop offset="35%" stopColor="#FF8C00" />
                     <stop offset="65%" stopColor="#0070F3" />
                     <stop offset="100%" stopColor="#0056B3" />
                   </linearGradient>
-
-                  {/* Gradient for central checkmark */}
                   <linearGradient id="checkGrad" x1="0%" y1="100%" x2="100%" y2="0%">
                     <stop offset="0%" stopColor="#FF6B00" />
                     <stop offset="100%" stopColor="#FFA600" />
                   </linearGradient>
                 </defs>
-
-                {/* 1. Main Document Outline Frame */}
                 <path 
                   d="M 58 15 L 38 15 C 28 15 23 23 23 35 L 23 68 C 23 80 28 85 38 85 L 62 85 C 72 85 77 80 77 68 L 77 34" 
                   stroke="url(#frameGrad)" 
@@ -251,14 +247,10 @@ export default function ResultsClient({ attempt, history }: ResultsClientProps) 
                   strokeLinecap="round" 
                   strokeLinejoin="round"
                 />
-
-                {/* 2. Folded Corner (Top Right) */}
                 <path 
                   d="M 64 15 L 75 26 C 76 27 76 28 75 28 L 65 28 C 64 28 64 27 64 26 Z" 
                   fill="#FFB800" 
                 />
-
-                {/* 3. Central Checkmark */}
                 <path 
                   d="M 36 53 L 47 64 L 68 39" 
                   stroke="url(#checkGrad)" 
@@ -267,14 +259,13 @@ export default function ResultsClient({ attempt, history }: ResultsClientProps) 
                   strokeLinejoin="round"
                 />
               </svg>
-
-              <span className="text-xl font-bold tracking-tight text-brand-navy dark:text-white">
+              <span className="text-lg sm:text-xl font-bold tracking-tight text-brand-navy dark:text-white">
                 fix<span className="text-brand-blue">IT</span>
               </span>
             </div>
 
-            {/* Unified Nav Links */}
-            <nav className="hidden md:flex space-x-6 text-sm font-semibold">
+            {/* Unified Nav Links: Fully responsive and visible on mobile viewports */}
+            <nav className="flex space-x-3 sm:space-x-6 text-[11px] sm:text-sm font-semibold">
               <Link href="/dashboard" className="text-muted-foreground hover:text-foreground transition-colors">
                 Dashboard
               </Link>
@@ -285,32 +276,32 @@ export default function ResultsClient({ attempt, history }: ResultsClientProps) 
           </div>
 
           {/* Action Controllers */}
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-1.5 sm:space-x-3 flex-shrink-0">
             <button
               onClick={exportToCSV}
-              className="px-2.5 py-1.5 border border-border text-xs rounded-sm hover:bg-muted text-muted-foreground transition-colors cursor-pointer font-medium"
+              className="px-2 py-1.5 sm:px-2.5 sm:py-1.5 border border-border text-[10px] sm:text-xs rounded-sm hover:bg-muted text-muted-foreground transition-colors cursor-pointer font-medium"
             >
-              Export CSV
+              CSV
             </button>
             <button
               onClick={() => window.print()}
-              className="px-2.5 py-1.5 border border-border text-xs rounded-sm hover:bg-muted text-muted-foreground transition-colors cursor-pointer font-medium"
+              className="px-2 py-1.5 sm:px-2.5 sm:py-1.5 border border-border text-[10px] sm:text-xs rounded-sm hover:bg-muted text-muted-foreground transition-colors cursor-pointer font-medium"
             >
-              Print Report
+              Print
             </button>
 
             {/* Theme Toggle icon */}
             <button
               onClick={toggleTheme}
-              className="p-2 border border-border rounded-sm hover:bg-muted transition-colors cursor-pointer"
+              className="p-1.5 sm:p-2 border border-border rounded-sm hover:bg-muted transition-colors cursor-pointer"
               title="Toggle Theme"
             >
               {theme === "light" ? (
-                <svg className="w-4 h-4 text-brand-blue" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-brand-blue" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.301-2.6.841-3.738A9.716 9.716 0 003 11.25C3 16.635 7.365 21 12.75 21a9.716 9.716 0 009.002-5.998z" />
                 </svg>
               ) : (
-                <svg className="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m0 13.5V21M4.22 4.22l1.59 1.59m12.38 12.38l1.59 1.59M3 12h2.25m13.5 0H21m-16.78 6.18l1.59-1.59M17.78 5.64l1.59 1.59M12 7.5a4.5 4.5 0 110 9 4.5 4.5 0 010-9z" />
                 </svg>
               )}
@@ -326,33 +317,37 @@ export default function ResultsClient({ attempt, history }: ResultsClientProps) 
           <h1 className="text-3xl font-extrabold tracking-tight">{attempt.test.title}</h1>
         </div>
 
-        {/* Scorecard Metrics */}
-        <section className="grid grid-cols-2 md:grid-cols-4 gap-6">
-        <div className="border border-border p-5 rounded-sm bg-card flex flex-col justify-between">
-            <span className="text-xs font-bold text-muted-foreground uppercase tracking-wide">Final Score</span>
-            <span className="text-3xl font-extrabold mt-2 text-brand-blue">
+        {/* Scoreboard Metrics (2 cols on mobile, 4 on desktop, with non-wrapping sizes) */}
+        <section className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+          <div className="border border-border p-4 sm:p-5 rounded-sm bg-card flex flex-col justify-between">
+            <span className="text-[10px] sm:text-xs font-bold text-muted-foreground uppercase tracking-wide">Final Score</span>
+            <span className="text-xl sm:text-2xl lg:text-3xl font-extrabold mt-2 text-brand-blue truncate whitespace-nowrap">
               {attempt.score}pts/{totalMaxMarks}pts
             </span>
           </div>
-          <div className="border border-border p-5 rounded-sm bg-card flex flex-col justify-between">
-            <span className="text-xs font-bold text-muted-foreground uppercase tracking-wide">Accuracy</span>
-            <span className="text-3xl font-extrabold mt-2 text-brand-navy dark:text-emerald-500">{accuracyPercentage}%</span>
+          <div className="border border-border p-4 sm:p-5 rounded-sm bg-card flex flex-col justify-between">
+            <span className="text-[10px] sm:text-xs font-bold text-muted-foreground uppercase tracking-wide">Accuracy</span>
+            <span className="text-xl sm:text-2xl lg:text-3xl font-extrabold mt-2 text-brand-navy dark:text-emerald-500 truncate whitespace-nowrap" style={{ fontVariantNumeric: "tabular-nums", fontFeatureSettings: '"tnum" 1' }}>
+              {accuracyPercentage}%
+            </span>
           </div>
-          <div className="border border-border p-5 rounded-sm bg-card flex flex-col justify-between">
-            <span className="text-xs font-bold text-muted-foreground uppercase tracking-wide">Time Taken</span>
-            <span className="text-3xl font-extrabold mt-2 font-mono">{formatSeconds(attempt.timeSpent)}</span>
+          <div className="border border-border p-4 sm:p-5 rounded-sm bg-card flex flex-col justify-between">
+            <span className="text-[10px] sm:text-xs font-bold text-muted-foreground uppercase tracking-wide">Time Taken</span>
+            <span className="text-xl sm:text-2xl lg:text-3xl font-extrabold mt-2 font-mono truncate whitespace-nowrap" style={{ fontVariantNumeric: "tabular-nums", fontFeatureSettings: '"tnum" 1' }}>
+              {formatSeconds(attempt.timeSpent)}
+            </span>
           </div>
-          <div className="border border-border p-5 rounded-sm bg-card flex flex-col justify-between">
-            <span className="text-xs font-bold text-muted-foreground uppercase tracking-wide">Ratio (C/I/U)</span>
-            <span className="text-2xl font-extrabold mt-2 font-mono text-muted-foreground">
-              {attempt.correctCount} / {attempt.incorrectCount} / {unattemptedCount}
+          <div className="border border-border p-4 sm:p-5 rounded-sm bg-card flex flex-col justify-between">
+            <span className="text-[10px] sm:text-xs font-bold text-muted-foreground uppercase tracking-wide">Ratio (C/I/U)</span>
+            <span className="text-xl sm:text-2xl lg:text-3xl font-extrabold mt-2 font-mono text-muted-foreground truncate whitespace-nowrap" style={{ fontVariantNumeric: "tabular-nums", fontFeatureSettings: '"tnum" 1' }}>
+              {attempt.correctCount}/{attempt.incorrectCount}/{unattemptedCount}
             </span>
           </div>
         </section>
 
         {/* Attempt Comparison Progress Timeline */}
         {history.length > 1 && (
-          <section className="border border-border p-6 rounded-sm bg-card space-y-4">
+          <section className="border border-border p-5 sm:p-6 rounded-sm bg-card space-y-4">
             <h3 className="font-bold text-sm uppercase tracking-wide border-b border-border pb-3 text-muted-foreground">
               Attempt Comparison & Progress History
             </h3>
@@ -366,23 +361,28 @@ export default function ResultsClient({ attempt, history }: ResultsClientProps) 
                   minute: "2-digit"
                 });
                 return (
-                  <div key={h.id} className="flex items-center justify-between text-xs py-1 border-b border-border/40 last:border-0">
-                    <div className="flex items-center space-x-3">
-                      <span className={`w-5 h-5 flex items-center justify-center rounded-full font-bold text-[10px] ${
+                  <div 
+                    key={h.id} 
+                    className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 py-3 border-b border-border/40 last:border-0"
+                  >
+                    <div className="flex items-center space-x-3 min-w-0">
+                      <span className={`w-5 h-5 flex-shrink-0 flex items-center justify-center rounded-full font-bold text-[10px] ${
                         isCurrent ? "bg-brand-blue text-white" : "bg-muted text-muted-foreground"
                       }`}>
                         {index + 1}
                       </span>
-                      <span className={isCurrent ? "font-bold text-foreground" : "text-muted-foreground"}>
+                      <span className={`truncate text-xs ${isCurrent ? "font-bold text-foreground" : "text-muted-foreground"}`}>
                         Attempt on {formattedDate} {isCurrent && "(Current Attempt)"}
                       </span>
                     </div>
-                    <div className="flex items-center space-x-4 font-mono">
-                      <span className={isCurrent ? "font-bold text-brand-blue" : "text-muted-foreground"}>
-                        Score: {h.score} pts
+                    
+                    {/* Aligns details cleanly, preventing proportional unit wrapping */}
+                    <div className="flex items-center space-x-4 font-mono text-[11px] sm:text-xs pl-8 sm:pl-0 flex-shrink-0 select-none">
+                      <span className={`whitespace-nowrap ${isCurrent ? "font-bold text-brand-blue" : "text-muted-foreground"}`}>
+                        Score: <span style={{ fontVariantNumeric: "tabular-nums", fontFeatureSettings: '"tnum" 1' }}>{h.score}pts</span>
                       </span>
-                      <span className="text-muted-foreground">
-                        Time: {formatSeconds(h.timeSpent)}
+                      <span className="text-muted-foreground whitespace-nowrap">
+                        Time: <span style={{ fontVariantNumeric: "tabular-nums", fontFeatureSettings: '"tnum" 1' }}>{formatSeconds(h.timeSpent)}</span>
                       </span>
                     </div>
                   </div>

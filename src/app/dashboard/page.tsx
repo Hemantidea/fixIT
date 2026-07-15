@@ -4,7 +4,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { saveTest, getTests, handleSignOut } from "../actions/test";
 import { testSchemaValidator } from "../../lib/validators";
 import Link from "next/link";
-import Image from "next/image";
 import CopyButton from "../../components/CopyButton";
 import CodePlayground from "../../components/CodePlayground";
 
@@ -27,6 +26,7 @@ interface TestItem {
 
 export default function Dashboard() {
   const [tests, setTests] = useState<TestItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<"upload" | "paste">("upload");
   const [dragActive, setDragActive] = useState(false);
   const [pastedJson, setPastedJson] = useState("");
@@ -58,11 +58,14 @@ export default function Dashboard() {
 }`;
 
   const refreshTests = async () => {
+    setIsLoading(true);
     try {
       const data = await getTests();
       setTests(data as any);
     } catch (err) {
       console.error("Failed to load assessments", err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -99,7 +102,7 @@ export default function Dashboard() {
       setValidationSuccess(`Configuration from ${sourceName} verified. Ready to import.`);
     } catch (err: any) {
       if (err.name === "ZodError") {
-        const validationIssues = err?.issues || err?.errors || [];
+        const validationIssues = err.issues || err.errors || [];
         const errorsList = validationIssues
           .map((e: any) => `${e.path.join(".")}: ${e.message}`)
           .join("\n");
@@ -156,7 +159,6 @@ export default function Dashboard() {
       setTimeout(() => setValidationSuccess(null), 3000);
     } else {
       setValidationError(result.error || "Database import transaction failed.");
-      // Fix visual card collision bug: clear success states if DB transaction fails
       setValidationSuccess(null);
       setPendingUploadJson(null);
     }
@@ -172,11 +174,11 @@ export default function Dashboard() {
     <div className="min-h-screen bg-background text-foreground flex flex-col justify-between">
       {/* Header */}
       <header className="border-b border-border bg-background py-4 px-4 sm:px-6 sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <div className="flex items-center space-x-8">
-            <div className="flex items-center space-x-3">
+        <div className="max-w-6xl mx-auto flex items-center justify-between gap-2">
+          <div className="flex items-center space-x-4 sm:space-x-8 min-w-0">
+            <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
               <svg 
-                className="w-8 h-8 flex-shrink-0" 
+                className="w-7 h-7 sm:w-8 sm:h-8 flex-shrink-0" 
                 viewBox="0 0 100 100" 
                 fill="none" 
                 xmlns="http://www.w3.org/2000/svg"
@@ -212,14 +214,13 @@ export default function Dashboard() {
                   strokeLinejoin="round"
                 />
               </svg>
-
-              <span className="text-xl font-bold tracking-tight text-brand-navy dark:text-white">
+              <span className="text-lg sm:text-xl font-bold tracking-tight text-brand-navy dark:text-white">
                 fix<span className="text-brand-blue">IT</span>
               </span>
             </div>
 
             {/* Nav Links */}
-            <nav className="hidden md:flex space-x-6 text-sm font-semibold">
+            <nav className="flex space-x-3 sm:space-x-6 text-[11px] sm:text-sm font-semibold">
               <Link href="/dashboard" className="text-brand-blue transition-colors">
                 Dashboard
               </Link>
@@ -229,25 +230,26 @@ export default function Dashboard() {
             </nav>
           </div>
 
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
+            {/* Sun / Moon Theme Switcher */}
             <button
               onClick={toggleTheme}
-              className="p-2 border border-border rounded-sm hover:bg-muted transition-colors cursor-pointer"
+              className="p-1.5 sm:p-2 border border-border rounded-sm hover:bg-muted transition-colors cursor-pointer"
               title="Toggle Theme"
             >
               {theme === "light" ? (
-                <svg className="w-4 h-4 text-brand-blue" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-brand-blue" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.301-2.6.841-3.738A9.716 9.716 0 003 11.25C3 16.635 7.365 21 12.75 21a9.716 9.716 0 009.002-5.998z" />
                 </svg>
               ) : (
-                <svg className="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m0 13.5V21M4.22 4.22l1.59 1.59m12.38 12.38l1.59 1.59M3 12h2.25m13.5 0H21m-16.78 6.18l1.59-1.59M17.78 5.64l1.59 1.59M12 7.5a4.5 4.5 0 110 9 4.5 4.5 0 010-9z" />
                 </svg>
               )}
             </button>
             <button
               onClick={() => handleSignOut()}
-              className="bg-brand-navy dark:bg-slate-800 text-white hover:bg-slate-800 dark:hover:bg-slate-700 font-medium text-xs px-2.5 py-1.5 rounded-sm transition-colors cursor-pointer"
+              className="bg-brand-navy dark:bg-slate-800 text-white hover:bg-slate-800 dark:hover:bg-slate-700 font-medium text-[10px] sm:text-xs px-2 py-1.5 sm:px-2.5 sm:py-1.5 rounded-sm transition-colors cursor-pointer"
             >
               Log Out
             </button>
@@ -260,11 +262,11 @@ export default function Dashboard() {
         {/* HERO SECTION */}
         <section className="border border-border p-6 rounded-sm bg-card space-y-6">
           <div className="space-y-3 text-center">
-            {/* Copy Boilerplate option */}
+            
             <div className="space-y-1">
               <h1 className="text-2xl font-bold tracking-tight">Import Assessment Configuration</h1>
               <p className="text-xs text-muted-foreground">
-                Drop a valid JSON file or paste it directly to validate and deploy.
+                Drop an AI-generated JSON file or paste it directly to validate and deploy.
               </p>
             </div>
           </div>
@@ -366,6 +368,44 @@ export default function Dashboard() {
           )}
         </section>
 
+        {/* QUICK PLATFORM GUIDE */}
+        <section className="border border-border p-6 rounded-sm bg-card space-y-6">
+          <h3 className="font-bold text-sm uppercase tracking-wide border-b border-border pb-3 text-muted-foreground">
+            Quick Platform Guide
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs leading-relaxed text-muted-foreground">
+            <div className="space-y-2">
+              <h4 className="font-bold text-foreground text-xs">1. Generate & Import</h4>
+              <p>
+                Use an external LLM to generate tests matching the exact JSON schema schemaVersion 1.0.0. Drag-and-drop the generated file or paste the text directly above, validate the inputs offline, and click import to save to Neon.
+              </p>
+            </div>
+            <div className="space-y-2">
+              <h4 className="font-bold text-foreground text-xs">2. Dynamic Testing & Caching</h4>
+              <p>
+                Start your assessment in secure, programmatic fullscreen mode. The engine tracks overall test durations, elapsed times spent per question, active review flags, and bookmarks. Unsubmitted sessions are cached locally.
+              </p>
+            </div>
+            <div className="space-y-2">
+              <h4 className="font-bold text-foreground text-xs">3. Grading & Scoring</h4>
+              <p>
+                MCQs evaluate matching keys, MSQs check exact selections, and Numericals check float ranges. Point calculations process relative weight marks and negative penalties securely before saving to the database.
+              </p>
+            </div>
+            <div className="space-y-2">
+              <h4 className="font-bold text-foreground text-xs">4. Performance Reporting</h4>
+              <p>
+                View accuracy metrics, topic distributions, and historical attempt timelines. Export individual reports to CSV or print clean physical reports directly from your browser.
+              </p>
+            </div>
+          </div>
+
+          <div className="border-t border-border pt-6 space-y-3">
+            <h4 className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">AI Generator Toolkit Reference</h4>
+            <CodePlayground />
+          </div>
+        </section>
+
         {/* LIST SECTION: Catalog Listings */}
         <section className="space-y-6">
           <div className="space-y-1">
@@ -373,7 +413,54 @@ export default function Dashboard() {
             <p className="text-xs text-muted-foreground">Select an assessment to begin testing.</p>
           </div>
 
-          {tests.length === 0 ? (
+          {isLoading ? (
+            <div className="flex flex-col items-center justify-center py-16 space-y-4">
+              <svg 
+                className="w-14 h-14 flex-shrink-0" 
+                viewBox="0 0 100 100" 
+                fill="none" 
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <defs>
+                  <linearGradient id="dashLoadFrameGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#FF6B00" />
+                    <stop offset="35%" stopColor="#FF8C00" />
+                    <stop offset="65%" stopColor="#0070F3" />
+                    <stop offset="100%" stopColor="#0056B3" />
+                  </linearGradient>
+                  <linearGradient id="dashLoadCheckGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#FF6B00" />
+                    <stop offset="100%" stopColor="#FFA600" />
+                  </linearGradient>
+                </defs>
+                <path 
+                  d="M 58 15 L 38 15 C 28 15 23 23 23 35 L 23 68 C 23 80 28 85 38 85 L 62 85 C 72 85 77 80 77 68 L 77 34" 
+                  stroke="url(#dashLoadFrameGrad)" 
+                  strokeWidth="9" 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round"
+                  className="opacity-30"
+                />
+                <path 
+                  d="M 64 15 L 75 26 C 76 27 76 28 75 28 L 65 28 C 64 28 64 27 64 26 Z" 
+                  fill="#FFB800" 
+                  className="opacity-30"
+                />
+                <path 
+                  d="M 36 53 L 47 64 L 68 39" 
+                  stroke="url(#dashLoadCheckGrad)" 
+                  strokeWidth="9" 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round"
+                  className="animate-pulse"
+                  style={{ animationDuration: "1.2s" }}
+                />
+              </svg>
+              <span className="text-[10px] text-muted-foreground font-mono uppercase tracking-wider animate-pulse">
+                Retrieving assessments...
+              </span>
+            </div>
+          ) : tests.length === 0 ? (
             <div className="border border-border p-8 rounded-sm text-center bg-card">
               <p className="text-sm text-muted-foreground">No assessments imported yet.</p>
             </div>
@@ -461,43 +548,6 @@ export default function Dashboard() {
               })}
             </div>
           )}
-        </section>
-        {/* QUICK PLATFORM GUIDE */}
-        <section className="border border-border p-6 rounded-sm bg-card space-y-6">
-          <h3 className="font-bold text-sm uppercase tracking-wide border-b border-border pb-3 text-muted-foreground">
-            Quick Platform Guide
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs leading-relaxed text-muted-foreground">
-            <div className="space-y-2">
-              <h4 className="font-bold text-foreground text-xs">1. Generate & Import</h4>
-              <p>
-                Use an external LLM to generate tests matching the exact JSON schema schemaVersion 1.0.0. Drag-and-drop the generated file or paste the text directly above, validate the inputs offline, and click import to save to Neon.
-              </p>
-            </div>
-            <div className="space-y-2">
-              <h4 className="font-bold text-foreground text-xs">2. Dynamic Testing & Caching</h4>
-              <p>
-                Start your assessment in secure, programmatic fullscreen mode. The engine tracks overall test durations, elapsed times spent per question, active review flags, and bookmarks. Unsubmitted sessions are cached locally.
-              </p>
-            </div>
-            <div className="space-y-2">
-              <h4 className="font-bold text-foreground text-xs">3. Grading & Scoring</h4>
-              <p>
-                MCQs evaluate matching keys, MSQs check exact selections, and Numericals check float ranges. Point calculations process relative weight marks and negative penalties securely before saving to the database.
-              </p>
-            </div>
-            <div className="space-y-2">
-              <h4 className="font-bold text-foreground text-xs">4. Performance Reporting</h4>
-              <p>
-                View accuracy metrics, topic distributions, and historical attempt timelines. Export individual reports to CSV or print clean physical reports directly from your browser.
-              </p>
-            </div>
-          </div>
-
-          <div className="border-t border-border pt-6 space-y-3">
-            <h4 className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">AI Generator Toolkit Reference</h4>
-            <CodePlayground />
-          </div>
         </section>
       </main>
 

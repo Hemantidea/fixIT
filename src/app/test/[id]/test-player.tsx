@@ -380,7 +380,10 @@ export default function TestPlayer({ test, initialBookmarks }: TestPlayerProps) 
 
             <div className="text-right">
               <p className="text-[8px] sm:text-[10px] uppercase text-muted-foreground font-semibold">Time</p>
-              <p className="font-mono text-base sm:text-lg font-bold text-brand-orange">
+              <p 
+                className="font-mono text-base sm:text-lg font-bold text-brand-orange"
+                style={{ fontVariantNumeric: "tabular-nums", fontFeatureSettings: '"tnum" 1' }}
+              >
                 {formatSeconds(overallTimeLeft)}
               </p>
             </div>
@@ -496,13 +499,21 @@ return (
         {/* Left Section: Active Question Card (Spans full width on mobile, 8 columns on desktop) */}
         <div className="lg:col-span-8 flex flex-col justify-between border border-border bg-card rounded-sm p-4 sm:p-6 space-y-6 sm:space-y-8">
           <div className="space-y-4 sm:space-y-6">
-            <div className="flex items-center justify-between border-b border-border pb-3">
+           {/* Responsive Metadata Header - Stacks on mobile to prevent truncation */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border pb-3">
               <span className="text-[10px] sm:text-xs uppercase tracking-wider font-semibold text-muted-foreground truncate">
-                Category: {activeQuestion.topic} • Type: {activeQuestion.type}
+                Category: {activeQuestion.topic}
               </span>
-              <span className="text-[10px] sm:text-xs uppercase tracking-wider font-semibold text-muted-foreground flex-shrink-0">
-                +{activeQuestion.marks ?? 1} / -{activeQuestion.negativeMarks ?? 0}
-              </span>
+              <div className="flex items-center space-x-2 text-[10px] sm:text-xs uppercase tracking-wider font-semibold text-muted-foreground flex-shrink-0 select-none">
+                {/* Clean, low-profile question type badge */}
+                <span className="bg-muted px-2 py-0.5 rounded-[4px] text-foreground/80 lowercase first-letter:uppercase font-medium">
+                  {activeQuestion.type}
+                </span>
+                <span>•</span>
+                <span style={{ fontVariantNumeric: "tabular-nums", fontFeatureSettings: '"tnum" 1' }}>
+                  +{activeQuestion.marks ?? 1} / -{activeQuestion.negativeMarks ?? 0}
+                </span>
+              </div>
             </div>
 
             <h2 className="text-base sm:text-lg font-medium leading-relaxed">
@@ -559,17 +570,18 @@ return (
             </div>
           </div>
 
+          {/* Responsive Bottom Controls with optimized Mobile Thumb-reach boundaries */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-t border-border pt-5">
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2 w-full sm:w-auto">
               <button
                 onClick={handleClearResponse}
-                className="border border-border text-muted-foreground hover:bg-muted text-[10px] sm:text-xs font-bold px-3 sm:px-4 py-2 rounded-sm cursor-pointer"
+                className="flex-1 sm:flex-none border border-border text-muted-foreground hover:bg-muted text-[10px] sm:text-xs font-bold px-3 sm:px-4 py-2 rounded-sm cursor-pointer"
               >
                 Clear
               </button>
               <button
                 onClick={toggleMarkedForReview}
-                className={`text-[10px] sm:text-xs font-bold px-3 sm:px-4 py-2 rounded-sm cursor-pointer border ${
+                className={`flex-1 sm:flex-none text-[10px] sm:text-xs font-bold px-3 sm:px-4 py-2 rounded-sm cursor-pointer border ${
                   markedForReview.includes(activeQuestion.id)
                     ? "bg-amber-500/15 border-amber-500 text-amber-500"
                     : "border-border text-muted-foreground hover:bg-muted"
@@ -579,7 +591,7 @@ return (
               </button>
               <button
                 onClick={toggleBookmark}
-                className={`text-[10px] sm:text-xs font-bold px-3 sm:px-4 py-2 rounded-sm cursor-pointer border ${
+                className={`flex-1 sm:flex-none text-[10px] sm:text-xs font-bold px-3 sm:px-4 py-2 rounded-sm cursor-pointer border ${
                   bookmarks.includes(activeQuestion.id)
                     ? "bg-purple-500/15 border-purple-500 text-purple-500"
                     : "border-border text-muted-foreground hover:bg-muted"
@@ -589,18 +601,23 @@ return (
               </button>
             </div>
 
-            <div className="flex justify-between sm:justify-end gap-2 w-full sm:w-auto">
+            <div className="flex gap-2 w-full sm:w-auto">
               <button
                 disabled={currentIndex === 0}
                 onClick={() => setCurrentIndex((prev) => prev - 1)}
-                className="flex-1 sm:flex-none border border-border hover:bg-muted text-[10px] sm:text-xs font-bold px-4 py-2 rounded-sm disabled:opacity-50 cursor-pointer"
+                className="flex-1 sm:flex-none border border-border hover:bg-muted text-[10px] sm:text-xs font-bold px-4 py-2.5 rounded-sm disabled:opacity-50 cursor-pointer text-center"
               >
                 Previous
               </button>
               <button
-                disabled={currentIndex === questions.length - 1}
-                onClick={() => setCurrentIndex((prev) => prev + 1)}
-                className="flex-1 sm:flex-none bg-brand-navy dark:bg-slate-800 text-white hover:bg-slate-800 font-bold text-[10px] sm:text-xs px-4 py-2 rounded-sm disabled:opacity-50 cursor-pointer"
+                onClick={() => {
+                  if (currentIndex === questions.length - 1) {
+                    alert("This is the last question. Please click the red 'Submit' button in the top header to submit your test.");
+                  } else {
+                    setCurrentIndex((prev) => prev + 1);
+                  }
+                }}
+                className="flex-1 sm:flex-none bg-brand-navy dark:bg-slate-800 text-white hover:bg-slate-800 font-bold text-[10px] sm:text-xs px-4 py-2.5 rounded-sm cursor-pointer text-center"
               >
                 Save & Next
               </button>
