@@ -35,11 +35,48 @@ export default function Loading() {
           ))}
         </div>
 
-        {/* CSS Loading Spinner */}
+        {/* CSS Brand Logo Loading Spinner */}
         <div className="flex flex-col items-center justify-center py-16 space-y-4">
-          <svg className="animate-spin h-8 w-8 text-brand-blue" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.001 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+          <svg 
+            className="w-14 h-14 flex-shrink-0" 
+            viewBox="0 0 100 100" 
+            fill="none" 
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <defs>
+              <linearGradient id="resLoadFrameGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#FF6B00" />
+                <stop offset="35%" stopColor="#FF8C00" />
+                <stop offset="65%" stopColor="#0070F3" />
+                <stop offset="100%" stopColor="#0056B3" />
+              </linearGradient>
+              <linearGradient id="resLoadCheckGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#FF6B00" />
+                <stop offset="100%" stopColor="#FFA600" />
+              </linearGradient>
+            </defs>
+            <path 
+              d="M 58 15 L 38 15 C 28 15 23 23 23 35 L 23 68 C 23 80 28 85 38 85 L 62 85 C 72 85 77 80 77 68 L 77 34" 
+              stroke="url(#resLoadFrameGrad)" 
+              strokeWidth="9" 
+              strokeLinecap="round" 
+              strokeLinejoin="round"
+              className="opacity-30"
+            />
+            <path 
+              d="M 64 15 L 75 26 C 76 27 76 28 75 28 L 65 28 C 64 28 64 27 64 26 Z" 
+              fill="#FFB800" 
+              className="opacity-30"
+            />
+            <path 
+              d="M 36 53 L 47 64 L 68 39" 
+              stroke="url(#resLoadCheckGrad)" 
+              strokeWidth="9" 
+              strokeLinecap="round" 
+              strokeLinejoin="round"
+              className="animate-pulse"
+              style={{ animationDuration: "1.2s" }}
+            />
           </svg>
           <span className="text-[10px] text-muted-foreground font-mono uppercase tracking-wider">
             Compiling performance database...

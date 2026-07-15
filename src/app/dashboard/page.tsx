@@ -1,11 +1,12 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { saveTest, getTests, handleSignOut } from "@/app/actions/test";
+import { saveTest, getTests, handleSignOut } from "../actions/test";
+import { testSchemaValidator } from "../../lib/validators";
 import Link from "next/link";
 import Image from "next/image";
 import CopyButton from "../../components/CopyButton";
-import CodePlayground from "@/components/CodePlayground";
+import CodePlayground from "../../components/CodePlayground";
 
 interface AttemptItem {
   id: string;
@@ -89,11 +90,24 @@ export default function Dashboard() {
     setPendingUploadJson(null);
 
     try {
-      JSON.parse(text);
+      const parsedData = JSON.parse(text);
+      
+      // Execute strict Zod Schema checks client-side for instant feedback
+      testSchemaValidator.parse(parsedData);
+      
       setPendingUploadJson(text);
       setValidationSuccess(`Configuration from ${sourceName} verified. Ready to import.`);
     } catch (err: any) {
-      setValidationError(`Syntax Error: ${err.message}`);
+      if (err.name === "ZodError") {
+        const validationIssues = err?.issues || err?.errors || [];
+        const errorsList = validationIssues
+          .map((e: any) => `${e.path.join(".")}: ${e.message}`)
+          .join("\n");
+          
+        setValidationError(`Schema Validation Error:\n${errorsList}`);
+      } else {
+        setValidationError(`Syntax Error: ${err.message}`);
+      }
     }
   };
 
@@ -142,6 +156,9 @@ export default function Dashboard() {
       setTimeout(() => setValidationSuccess(null), 3000);
     } else {
       setValidationError(result.error || "Database import transaction failed.");
+      // Fix visual card collision bug: clear success states if DB transaction fails
+      setValidationSuccess(null);
+      setPendingUploadJson(null);
     }
   };
 
@@ -158,8 +175,6 @@ export default function Dashboard() {
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center space-x-8">
             <div className="flex items-center space-x-3">
-              {/* Unified Inline SVG Logo (Bypasses Next.js Optimization entirely) */}
-            <div className="flex items-center space-x-3">
               <svg 
                 className="w-8 h-8 flex-shrink-0" 
                 viewBox="0 0 100 100" 
@@ -167,22 +182,17 @@ export default function Dashboard() {
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <defs>
-                  {/* Diagonal Gradient matching the Outer Frame */}
                   <linearGradient id="frameGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" stopColor="#FF6B00" />
                     <stop offset="35%" stopColor="#FF8C00" />
                     <stop offset="65%" stopColor="#0070F3" />
                     <stop offset="100%" stopColor="#0056B3" />
                   </linearGradient>
-
-                  {/* Gradient for central checkmark */}
                   <linearGradient id="checkGrad" x1="0%" y1="100%" x2="100%" y2="0%">
                     <stop offset="0%" stopColor="#FF6B00" />
                     <stop offset="100%" stopColor="#FFA600" />
                   </linearGradient>
                 </defs>
-
-                {/* 1. Main Document Outline Frame */}
                 <path 
                   d="M 58 15 L 38 15 C 28 15 23 23 23 35 L 23 68 C 23 80 28 85 38 85 L 62 85 C 72 85 77 80 77 68 L 77 34" 
                   stroke="url(#frameGrad)" 
@@ -190,14 +200,10 @@ export default function Dashboard() {
                   strokeLinecap="round" 
                   strokeLinejoin="round"
                 />
-
-                {/* 2. Folded Corner (Top Right) */}
                 <path 
                   d="M 64 15 L 75 26 C 76 27 76 28 75 28 L 65 28 C 64 28 64 27 64 26 Z" 
                   fill="#FFB800" 
                 />
-
-                {/* 3. Central Checkmark */}
                 <path 
                   d="M 36 53 L 47 64 L 68 39" 
                   stroke="url(#checkGrad)" 
@@ -210,7 +216,6 @@ export default function Dashboard() {
               <span className="text-xl font-bold tracking-tight text-brand-navy dark:text-white">
                 fix<span className="text-brand-blue">IT</span>
               </span>
-            </div>
             </div>
 
             {/* Nav Links */}
@@ -225,7 +230,6 @@ export default function Dashboard() {
           </div>
 
           <div className="flex items-center space-x-3">
-            {/* Sun / Moon Theme Switcher */}
             <button
               onClick={toggleTheme}
               className="p-2 border border-border rounded-sm hover:bg-muted transition-colors cursor-pointer"
@@ -256,12 +260,11 @@ export default function Dashboard() {
         {/* HERO SECTION */}
         <section className="border border-border p-6 rounded-sm bg-card space-y-6">
           <div className="space-y-3 text-center">
-            {/* Direct Copy Option inside the Hero Section */}
-            
+            {/* Copy Boilerplate option */}
             <div className="space-y-1">
               <h1 className="text-2xl font-bold tracking-tight">Import Assessment Configuration</h1>
               <p className="text-xs text-muted-foreground">
-                Drop an AI-generated JSON file or paste it directly to validate and deploy.
+                Drop a valid JSON file or paste it directly to validate and deploy.
               </p>
             </div>
           </div>
@@ -363,7 +366,6 @@ export default function Dashboard() {
           )}
         </section>
 
-
         {/* LIST SECTION: Catalog Listings */}
         <section className="space-y-6">
           <div className="space-y-1">
@@ -460,46 +462,43 @@ export default function Dashboard() {
             </div>
           )}
         </section>
-                              {/* QUICK PLATFORM GUIDE */}
-                               <section className="border border-border p-6 rounded-sm bg-card space-y-6">
-                                   <h3 className="font-bold text-sm uppercase tracking-wide border-b border-border pb-3 text-muted-foreground">
-                                     Quick Platform Guide
-                                   </h3>
-                                 <div className="border-t border-border pt-6 space-y-3">
-                                   <h4 className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">AI Generator Toolkit Reference</h4>
-                                   <CodePlayground />
-                                 </div>
-                                 <div className="space-y-4">
-                                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs leading-relaxed text-muted-foreground">
-                                     <div className="space-y-2">
-                                       <h4 className="font-bold text-foreground text-xs">1. Generate & Import</h4>
-                                       <p>
-                                         Use an external LLM to generate tests matching the exact JSON schema schemaVersion 1.0.0. Drag-and-drop the generated file or paste the text directly above, validate the inputs offline, and click import to save to Neon.
-                                       </p>
-                                     </div>
-                                     <div className="space-y-2">
-                                       <h4 className="font-bold text-foreground text-xs">2. Dynamic Testing & Caching</h4>
-                                       <p>
-                                         Start your assessment in secure, programmatic fullscreen mode. The engine tracks overall test durations, elapsed times spent per question, active review flags, and bookmarks. Unsubmitted sessions are cached locally.
-                                       </p>
-                                     </div>
-                                     <div className="space-y-2">
-                                       <h4 className="font-bold text-foreground text-xs">3. Grading & Scoring</h4>
-                                       <p>
-                                         MCQs evaluate matching keys, MSQs check exact selections, and Numericals check float ranges. Point calculations process relative weight marks and negative penalties securely before saving to the database.
-                                       </p>
-                                     </div>
-                                     <div className="space-y-2">
-                                       <h4 className="font-bold text-foreground text-xs">4. Performance Reporting</h4>
-                                       <p>
-                                         View accuracy metrics, topic distributions, and historical attempt timelines. Export individual reports to CSV or print clean physical reports directly from your browser.
-                                       </p>
-                                     </div>
-                                   </div>
-                                 </div>
-                       
-                                 {/* Embedded Node.js-Style Code Copier Panel right under the Guide */}
-                               </section>
+        {/* QUICK PLATFORM GUIDE */}
+        <section className="border border-border p-6 rounded-sm bg-card space-y-6">
+          <h3 className="font-bold text-sm uppercase tracking-wide border-b border-border pb-3 text-muted-foreground">
+            Quick Platform Guide
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs leading-relaxed text-muted-foreground">
+            <div className="space-y-2">
+              <h4 className="font-bold text-foreground text-xs">1. Generate & Import</h4>
+              <p>
+                Use an external LLM to generate tests matching the exact JSON schema schemaVersion 1.0.0. Drag-and-drop the generated file or paste the text directly above, validate the inputs offline, and click import to save to Neon.
+              </p>
+            </div>
+            <div className="space-y-2">
+              <h4 className="font-bold text-foreground text-xs">2. Dynamic Testing & Caching</h4>
+              <p>
+                Start your assessment in secure, programmatic fullscreen mode. The engine tracks overall test durations, elapsed times spent per question, active review flags, and bookmarks. Unsubmitted sessions are cached locally.
+              </p>
+            </div>
+            <div className="space-y-2">
+              <h4 className="font-bold text-foreground text-xs">3. Grading & Scoring</h4>
+              <p>
+                MCQs evaluate matching keys, MSQs check exact selections, and Numericals check float ranges. Point calculations process relative weight marks and negative penalties securely before saving to the database.
+              </p>
+            </div>
+            <div className="space-y-2">
+              <h4 className="font-bold text-foreground text-xs">4. Performance Reporting</h4>
+              <p>
+                View accuracy metrics, topic distributions, and historical attempt timelines. Export individual reports to CSV or print clean physical reports directly from your browser.
+              </p>
+            </div>
+          </div>
+
+          <div className="border-t border-border pt-6 space-y-3">
+            <h4 className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">AI Generator Toolkit Reference</h4>
+            <CodePlayground />
+          </div>
+        </section>
       </main>
 
       {/* Footer */}

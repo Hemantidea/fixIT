@@ -498,7 +498,7 @@ return (
           <div className="space-y-4 sm:space-y-6">
             <div className="flex items-center justify-between border-b border-border pb-3">
               <span className="text-[10px] sm:text-xs uppercase tracking-wider font-semibold text-muted-foreground truncate">
-                Category: {activeQuestion.topic}
+                Category: {activeQuestion.topic} • Type: {activeQuestion.type}
               </span>
               <span className="text-[10px] sm:text-xs uppercase tracking-wider font-semibold text-muted-foreground flex-shrink-0">
                 +{activeQuestion.marks ?? 1} / -{activeQuestion.negativeMarks ?? 0}

@@ -97,38 +97,117 @@ export default function ResultsClient({ attempt, history }: ResultsClientProps) 
     return true;
   });
 
+  // Enhanced Offline CSV Export Trigger
   const exportToCSV = () => {
-    const headers = ["Question Number", "Category", "Status", "Time Spent (Seconds)"];
-    
+    const totalMaxMarks = questions.reduce((sum: number, q: any) => sum + (q.marks ?? 1), 0);
+    const accuracy = totalQuestionsCount > 0 ? Math.round((attempt.correctCount / totalQuestionsCount) * 100) : 0;
+    const formattedDate = new Date(attempt.completedAt).toLocaleString();
+
+    // Helper to escape special characters, commas, and double-quotes for RFC 4180 CSV compliance
+    const escapeCSV = (str: string) => {
+      if (!str) return '""';
+      // Double quotes inside a CSV cell must be escaped by doubling them
+      return `"${str.replace(/"/g, '""')}"`;
+    };
+
+    const escapeMeta = (val: string) => {
+      if (!val) return "";
+      if (val.includes(",") || val.includes('"') || val.includes("\n")) {
+        return `"${val.replace(/"/g, '""')}"`;
+      }
+      return val;
+    };
+
+    // 1. Compile Metadata Header Rows
+    const metadata = [
+      ["Assessment Performance Report"],
+      ["Test Title", attempt.test.title],
+      ["Attempt Date", formattedDate],
+      ["Final Score", `${attempt.score}pts/${totalMaxMarks}pts`],
+      ["Accuracy", `${accuracy}%`],
+      ["Total Time Taken", `${Math.floor(attempt.timeSpent / 60)}m ${attempt.timeSpent % 60}s`],
+      [] // Spacer Row
+    ];
+
+    const metadataLines = metadata.map(row => 
+      row.map(cell => escapeMeta(String(cell))).join(",")
+    );
+
+    // 2. Prepare Detailed Table Headers
+    const headers = [
+      "Question Number", 
+      "Topic", 
+      "Subtopic", 
+      "Difficulty", 
+      "Question Text", 
+      "Your Response", 
+      "Correct Solution", 
+      "Status", 
+      "Points Awarded",
+      "Time Spent (Seconds)", 
+      "Explanation"
+    ];
+
+    // 3. Process Detailed Question Rows
     const rows: string[][] = questions.map((q: any, idx: number) => {
       const userResponse = attempt.responses.find((r) => r.questionId === q.id);
       
-      // Defensively fallback to empty array if JSON value is non-array or null
       const selectedArray = userResponse && Array.isArray(userResponse.selected)
         ? userResponse.selected
         : [];
 
       let status = "Unattempted";
+      let pointsAwarded = "0";
+
       if (selectedArray.length > 0) {
-        status = userResponse?.isCorrect ? "Correct" : "Incorrect";
+        // Safe navigation operator ?. prevents the 'possibly undefined' compiler error
+        if (userResponse?.isCorrect) {
+          status = "Correct";
+          pointsAwarded = `+${q.marks ?? 1}`;
+        } else {
+          status = "Incorrect";
+          pointsAwarded = `-${q.negativeMarks ?? 0}`;
+        }
       }
+
+      const responseStr = selectedArray.join(", ");
+      const correctStr = q.type === "NUMERICAL" && q.range
+        ? `Accepted Range: ${q.range.min} to ${q.range.max}`
+        : (q.correctAnswer || []).join(", ");
+
       return [
         `Question ${idx + 1}`,
-        q.topic,
+        escapeCSV(q.topic || ""),
+        escapeCSV(q.subtopic || ""),
+        escapeCSV(q.difficulty || "medium"),
+        escapeCSV(q.text || ""),
+        escapeCSV(responseStr),
+        escapeCSV(correctStr),
         status,
+        pointsAwarded,
         String(userResponse?.timeSpent || 0),
+        escapeCSV(q.explanation || "")
       ];
     });
-    const csvContent = [headers.join(","), ...rows.map((e: string[]) => e.join(","))].join("\n");
+
+    // 4. Compile Completed CSV Output
+    const csvContent = [
+      ...metadataLines,
+      headers.join(","),
+      ...rows.map((e: string[]) => e.join(","))
+    ].join("\n");
+    
+    // 5. Generate and download UTF-8 encoded Blob to bypass browser length limits
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     
     const link = document.createElement("a");
     link.setAttribute("href", url);
-    link.setAttribute("download", `fixit_attempt_analysis_${attempt.id}.csv`);
+    link.setAttribute("download", `fixit_attempt_report_${attempt.id}.csv`);
     document.body.appendChild(link);
     link.click();
     
+    // Memory cleanup
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
   };

@@ -73,7 +73,7 @@ export default function CodePlayground() {
   ]
 }`;
 
-  // Full system prompt detailing instructions for other AI generators
+  // Updated system prompt explicitly enforcing array-based correctAnswer formats
   const rawPromptText = `# SYSTEM INSTRUCTIONS FOR ASSESSMENT GENERATION
 Act as an expert technical educator. Generate a diagnostic assessment on the requested topic.
 The output MUST be a raw JSON object conforming strictly to the "schemaVersion": "1.0.0" rules.
@@ -99,7 +99,7 @@ A. MCQ (Multiple Choice) Question Node:
    - "marks": point value (integer)
    - "negativeMarks": penalty value (float)
    - "options": exactly 4 strings
-   - "correctAnswer": exactly 1 string matching options exactly
+   - "correctAnswer": MUST be an array of strings containing exactly 1 element matching options exactly, e.g., ["option"]
    - "explanation": reasoning detail
    - "referenceUrl": optional string
 
@@ -111,7 +111,7 @@ B. MSQ (Multiple Selection) Question Node:
    - "marks": point value (integer)
    - "negativeMarks": penalty value (float)
    - "options": 4 to 6 strings
-   - "correctAnswer": array of strings matching options exactly
+   - "correctAnswer": MUST be an array of strings containing all correct options exactly, e.g., ["option1", "option2"]
    - "explanation": reasoning detail
 
 C. NUMERICAL Question Node:
@@ -261,12 +261,12 @@ C. NUMERICAL Question Node:
               <span className="text-brand-blue">A. MCQ (Multiple Choice) Node:</span>{"\n"}
               <span className="text-slate-500">-</span> <span className="text-brand-orange">"type":</span> <span className="text-emerald-400">"MCQ"</span>{"\n"}
               <span className="text-slate-500">-</span> <span className="text-brand-orange">"options":</span> <span className="text-slate-400">exactly 4 strings</span>{"\n"}
-              <span className="text-slate-500">-</span> <span className="text-brand-orange">"correctAnswer":</span> <span className="text-slate-400">array containing exactly 1 string matching options exactly</span>{"\n"}{"\n"}
+              <span className="text-slate-500">-</span> <span className="text-brand-orange">"correctAnswer":</span> <span className="text-emerald-400">MUST be an array of strings containing exactly 1 element matching options exactly, e.g. ["option"]</span>{"\n"}{"\n"}
 
               <span className="text-brand-blue">B. MSQ (Multiple Selection) Node:</span>{"\n"}
               <span className="text-slate-500">-</span> <span className="text-brand-orange">"type":</span> <span className="text-emerald-400">"MSQ"</span>{"\n"}
               <span className="text-slate-500">-</span> <span className="text-brand-orange">"options":</span> <span className="text-slate-400">4 to 6 strings</span>{"\n"}
-              <span className="text-slate-500">-</span> <span className="text-brand-orange">"correctAnswer":</span> <span className="text-slate-400">array containing multiple strings matching options exactly</span>{"\n"}{"\n"}
+              <span className="text-slate-500">-</span> <span className="text-brand-orange">"correctAnswer":</span> <span className="text-emerald-400">MUST be an array of strings containing all correct options exactly, e.g. ["option1", "option2"]</span>{"\n"}{"\n"}
 
               <span className="text-brand-blue">C. NUMERICAL Node:</span>{"\n"}
               <span className="text-slate-500">-</span> <span className="text-brand-orange">"type":</span> <span className="text-emerald-400">"NUMERICAL"</span>{"\n"}

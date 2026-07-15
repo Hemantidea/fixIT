@@ -1505,6 +1505,7 @@ export namespace Prisma {
   export type UserCountOutputType = {
     attempts: number
     bookmarks: number
+    tests: number
     accounts: number
     sessions: number
   }
@@ -1512,6 +1513,7 @@ export namespace Prisma {
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     attempts?: boolean | UserCountOutputTypeCountAttemptsArgs
     bookmarks?: boolean | UserCountOutputTypeCountBookmarksArgs
+    tests?: boolean | UserCountOutputTypeCountTestsArgs
     accounts?: boolean | UserCountOutputTypeCountAccountsArgs
     sessions?: boolean | UserCountOutputTypeCountSessionsArgs
   }
@@ -1539,6 +1541,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountBookmarksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: BookmarkWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountTestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TestWhereInput
   }
 
   /**
@@ -1789,6 +1798,7 @@ export namespace Prisma {
     createdAt?: boolean
     attempts?: boolean | User$attemptsArgs<ExtArgs>
     bookmarks?: boolean | User$bookmarksArgs<ExtArgs>
+    tests?: boolean | User$testsArgs<ExtArgs>
     accounts?: boolean | User$accountsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -1819,6 +1829,7 @@ export namespace Prisma {
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     attempts?: boolean | User$attemptsArgs<ExtArgs>
     bookmarks?: boolean | User$bookmarksArgs<ExtArgs>
+    tests?: boolean | User$testsArgs<ExtArgs>
     accounts?: boolean | User$accountsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -1831,6 +1842,7 @@ export namespace Prisma {
     objects: {
       attempts: Prisma.$AttemptPayload<ExtArgs>[]
       bookmarks: Prisma.$BookmarkPayload<ExtArgs>[]
+      tests: Prisma.$TestPayload<ExtArgs>[]
       accounts: Prisma.$AccountPayload<ExtArgs>[]
       sessions: Prisma.$SessionPayload<ExtArgs>[]
     }
@@ -2235,6 +2247,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     attempts<T extends User$attemptsArgs<ExtArgs> = {}>(args?: Subset<T, User$attemptsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttemptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     bookmarks<T extends User$bookmarksArgs<ExtArgs> = {}>(args?: Subset<T, User$bookmarksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookmarkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    tests<T extends User$testsArgs<ExtArgs> = {}>(args?: Subset<T, User$testsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     accounts<T extends User$accountsArgs<ExtArgs> = {}>(args?: Subset<T, User$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sessions<T extends User$sessionsArgs<ExtArgs> = {}>(args?: Subset<T, User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -2711,6 +2724,30 @@ export namespace Prisma {
   }
 
   /**
+   * User.tests
+   */
+  export type User$testsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Test
+     */
+    select?: TestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Test
+     */
+    omit?: TestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TestInclude<ExtArgs> | null
+    where?: TestWhereInput
+    orderBy?: TestOrderByWithRelationInput | TestOrderByWithRelationInput[]
+    cursor?: TestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TestScalarFieldEnum | TestScalarFieldEnum[]
+  }
+
+  /**
    * User.accounts
    */
   export type User$accountsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2799,6 +2836,7 @@ export namespace Prisma {
 
   export type TestMinAggregateOutputType = {
     id: string | null
+    userId: string | null
     title: string | null
     description: string | null
     timeLimit: number | null
@@ -2808,6 +2846,7 @@ export namespace Prisma {
 
   export type TestMaxAggregateOutputType = {
     id: string | null
+    userId: string | null
     title: string | null
     description: string | null
     timeLimit: number | null
@@ -2817,6 +2856,7 @@ export namespace Prisma {
 
   export type TestCountAggregateOutputType = {
     id: number
+    userId: number
     title: number
     description: number
     timeLimit: number
@@ -2837,6 +2877,7 @@ export namespace Prisma {
 
   export type TestMinAggregateInputType = {
     id?: true
+    userId?: true
     title?: true
     description?: true
     timeLimit?: true
@@ -2846,6 +2887,7 @@ export namespace Prisma {
 
   export type TestMaxAggregateInputType = {
     id?: true
+    userId?: true
     title?: true
     description?: true
     timeLimit?: true
@@ -2855,6 +2897,7 @@ export namespace Prisma {
 
   export type TestCountAggregateInputType = {
     id?: true
+    userId?: true
     title?: true
     description?: true
     timeLimit?: true
@@ -2952,6 +2995,7 @@ export namespace Prisma {
 
   export type TestGroupByOutputType = {
     id: string
+    userId: string
     title: string
     description: string
     timeLimit: number
@@ -2981,12 +3025,14 @@ export namespace Prisma {
 
   export type TestSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    userId?: boolean
     title?: boolean
     description?: boolean
     timeLimit?: boolean
     schemaVersion?: boolean
     rawJson?: boolean
     createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
     attempts?: boolean | Test$attemptsArgs<ExtArgs>
     bookmarks?: boolean | Test$bookmarksArgs<ExtArgs>
     _count?: boolean | TestCountOutputTypeDefaultArgs<ExtArgs>
@@ -2994,26 +3040,31 @@ export namespace Prisma {
 
   export type TestSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    userId?: boolean
     title?: boolean
     description?: boolean
     timeLimit?: boolean
     schemaVersion?: boolean
     rawJson?: boolean
     createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["test"]>
 
   export type TestSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    userId?: boolean
     title?: boolean
     description?: boolean
     timeLimit?: boolean
     schemaVersion?: boolean
     rawJson?: boolean
     createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["test"]>
 
   export type TestSelectScalar = {
     id?: boolean
+    userId?: boolean
     title?: boolean
     description?: boolean
     timeLimit?: boolean
@@ -3022,23 +3073,30 @@ export namespace Prisma {
     createdAt?: boolean
   }
 
-  export type TestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "timeLimit" | "schemaVersion" | "rawJson" | "createdAt", ExtArgs["result"]["test"]>
+  export type TestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "title" | "description" | "timeLimit" | "schemaVersion" | "rawJson" | "createdAt", ExtArgs["result"]["test"]>
   export type TestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
     attempts?: boolean | Test$attemptsArgs<ExtArgs>
     bookmarks?: boolean | Test$bookmarksArgs<ExtArgs>
     _count?: boolean | TestCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type TestIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type TestIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type TestIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type TestIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
 
   export type $TestPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Test"
     objects: {
+      user: Prisma.$UserPayload<ExtArgs>
       attempts: Prisma.$AttemptPayload<ExtArgs>[]
       bookmarks: Prisma.$BookmarkPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      userId: string
       title: string
       description: string
       timeLimit: number
@@ -3439,6 +3497,7 @@ export namespace Prisma {
    */
   export interface Prisma__TestClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     attempts<T extends Test$attemptsArgs<ExtArgs> = {}>(args?: Subset<T, Test$attemptsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttemptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     bookmarks<T extends Test$bookmarksArgs<ExtArgs> = {}>(args?: Subset<T, Test$bookmarksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookmarkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -3471,6 +3530,7 @@ export namespace Prisma {
    */
   interface TestFieldRefs {
     readonly id: FieldRef<"Test", 'String'>
+    readonly userId: FieldRef<"Test", 'String'>
     readonly title: FieldRef<"Test", 'String'>
     readonly description: FieldRef<"Test", 'String'>
     readonly timeLimit: FieldRef<"Test", 'Int'>
@@ -3731,6 +3791,10 @@ export namespace Prisma {
      */
     data: TestCreateManyInput | TestCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TestIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -3801,6 +3865,10 @@ export namespace Prisma {
      * Limit how many Tests to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TestIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -10567,6 +10635,7 @@ export namespace Prisma {
 
   export const TestScalarFieldEnum: {
     id: 'id',
+    userId: 'userId',
     title: 'title',
     description: 'description',
     timeLimit: 'timeLimit',
@@ -10789,6 +10858,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"User"> | Date | string
     attempts?: AttemptListRelationFilter
     bookmarks?: BookmarkListRelationFilter
+    tests?: TestListRelationFilter
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
   }
@@ -10800,6 +10870,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     attempts?: AttemptOrderByRelationAggregateInput
     bookmarks?: BookmarkOrderByRelationAggregateInput
+    tests?: TestOrderByRelationAggregateInput
     accounts?: AccountOrderByRelationAggregateInput
     sessions?: SessionOrderByRelationAggregateInput
   }
@@ -10814,6 +10885,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"User"> | Date | string
     attempts?: AttemptListRelationFilter
     bookmarks?: BookmarkListRelationFilter
+    tests?: TestListRelationFilter
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
   }, "id" | "email">
@@ -10843,24 +10915,28 @@ export namespace Prisma {
     OR?: TestWhereInput[]
     NOT?: TestWhereInput | TestWhereInput[]
     id?: StringFilter<"Test"> | string
+    userId?: StringFilter<"Test"> | string
     title?: StringFilter<"Test"> | string
     description?: StringFilter<"Test"> | string
     timeLimit?: IntFilter<"Test"> | number
     schemaVersion?: StringFilter<"Test"> | string
     rawJson?: JsonFilter<"Test">
     createdAt?: DateTimeFilter<"Test"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
     attempts?: AttemptListRelationFilter
     bookmarks?: BookmarkListRelationFilter
   }
 
   export type TestOrderByWithRelationInput = {
     id?: SortOrder
+    userId?: SortOrder
     title?: SortOrder
     description?: SortOrder
     timeLimit?: SortOrder
     schemaVersion?: SortOrder
     rawJson?: SortOrder
     createdAt?: SortOrder
+    user?: UserOrderByWithRelationInput
     attempts?: AttemptOrderByRelationAggregateInput
     bookmarks?: BookmarkOrderByRelationAggregateInput
   }
@@ -10870,18 +10946,21 @@ export namespace Prisma {
     AND?: TestWhereInput | TestWhereInput[]
     OR?: TestWhereInput[]
     NOT?: TestWhereInput | TestWhereInput[]
+    userId?: StringFilter<"Test"> | string
     title?: StringFilter<"Test"> | string
     description?: StringFilter<"Test"> | string
     timeLimit?: IntFilter<"Test"> | number
     schemaVersion?: StringFilter<"Test"> | string
     rawJson?: JsonFilter<"Test">
     createdAt?: DateTimeFilter<"Test"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
     attempts?: AttemptListRelationFilter
     bookmarks?: BookmarkListRelationFilter
   }, "id">
 
   export type TestOrderByWithAggregationInput = {
     id?: SortOrder
+    userId?: SortOrder
     title?: SortOrder
     description?: SortOrder
     timeLimit?: SortOrder
@@ -10900,6 +10979,7 @@ export namespace Prisma {
     OR?: TestScalarWhereWithAggregatesInput[]
     NOT?: TestScalarWhereWithAggregatesInput | TestScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Test"> | string
+    userId?: StringWithAggregatesFilter<"Test"> | string
     title?: StringWithAggregatesFilter<"Test"> | string
     description?: StringWithAggregatesFilter<"Test"> | string
     timeLimit?: IntWithAggregatesFilter<"Test"> | number
@@ -11310,6 +11390,7 @@ export namespace Prisma {
     createdAt?: Date | string
     attempts?: AttemptCreateNestedManyWithoutUserInput
     bookmarks?: BookmarkCreateNestedManyWithoutUserInput
+    tests?: TestCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
   }
@@ -11321,6 +11402,7 @@ export namespace Prisma {
     createdAt?: Date | string
     attempts?: AttemptUncheckedCreateNestedManyWithoutUserInput
     bookmarks?: BookmarkUncheckedCreateNestedManyWithoutUserInput
+    tests?: TestUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
   }
@@ -11332,6 +11414,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attempts?: AttemptUpdateManyWithoutUserNestedInput
     bookmarks?: BookmarkUpdateManyWithoutUserNestedInput
+    tests?: TestUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
   }
@@ -11343,6 +11426,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attempts?: AttemptUncheckedUpdateManyWithoutUserNestedInput
     bookmarks?: BookmarkUncheckedUpdateManyWithoutUserNestedInput
+    tests?: TestUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -11376,12 +11460,14 @@ export namespace Prisma {
     schemaVersion: string
     rawJson: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
+    user: UserCreateNestedOneWithoutTestsInput
     attempts?: AttemptCreateNestedManyWithoutTestInput
     bookmarks?: BookmarkCreateNestedManyWithoutTestInput
   }
 
   export type TestUncheckedCreateInput = {
     id?: string
+    userId: string
     title: string
     description: string
     timeLimit: number
@@ -11400,12 +11486,14 @@ export namespace Prisma {
     schemaVersion?: StringFieldUpdateOperationsInput | string
     rawJson?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutTestsNestedInput
     attempts?: AttemptUpdateManyWithoutTestNestedInput
     bookmarks?: BookmarkUpdateManyWithoutTestNestedInput
   }
 
   export type TestUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     timeLimit?: IntFieldUpdateOperationsInput | number
@@ -11418,6 +11506,7 @@ export namespace Prisma {
 
   export type TestCreateManyInput = {
     id?: string
+    userId: string
     title: string
     description: string
     timeLimit: number
@@ -11438,6 +11527,7 @@ export namespace Prisma {
 
   export type TestUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     timeLimit?: IntFieldUpdateOperationsInput | number
@@ -11902,6 +11992,12 @@ export namespace Prisma {
     none?: BookmarkWhereInput
   }
 
+  export type TestListRelationFilter = {
+    every?: TestWhereInput
+    some?: TestWhereInput
+    none?: TestWhereInput
+  }
+
   export type AccountListRelationFilter = {
     every?: AccountWhereInput
     some?: AccountWhereInput
@@ -11924,6 +12020,10 @@ export namespace Prisma {
   }
 
   export type BookmarkOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type TestOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -12040,8 +12140,14 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
+  export type UserScalarRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
+  }
+
   export type TestCountOrderByAggregateInput = {
     id?: SortOrder
+    userId?: SortOrder
     title?: SortOrder
     description?: SortOrder
     timeLimit?: SortOrder
@@ -12056,6 +12162,7 @@ export namespace Prisma {
 
   export type TestMaxOrderByAggregateInput = {
     id?: SortOrder
+    userId?: SortOrder
     title?: SortOrder
     description?: SortOrder
     timeLimit?: SortOrder
@@ -12065,6 +12172,7 @@ export namespace Prisma {
 
   export type TestMinOrderByAggregateInput = {
     id?: SortOrder
+    userId?: SortOrder
     title?: SortOrder
     description?: SortOrder
     timeLimit?: SortOrder
@@ -12132,11 +12240,6 @@ export namespace Prisma {
   export type TestScalarRelationFilter = {
     is?: TestWhereInput
     isNot?: TestWhereInput
-  }
-
-  export type UserScalarRelationFilter = {
-    is?: UserWhereInput
-    isNot?: UserWhereInput
   }
 
   export type QuestionAttemptListRelationFilter = {
@@ -12444,6 +12547,13 @@ export namespace Prisma {
     connect?: BookmarkWhereUniqueInput | BookmarkWhereUniqueInput[]
   }
 
+  export type TestCreateNestedManyWithoutUserInput = {
+    create?: XOR<TestCreateWithoutUserInput, TestUncheckedCreateWithoutUserInput> | TestCreateWithoutUserInput[] | TestUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: TestCreateOrConnectWithoutUserInput | TestCreateOrConnectWithoutUserInput[]
+    createMany?: TestCreateManyUserInputEnvelope
+    connect?: TestWhereUniqueInput | TestWhereUniqueInput[]
+  }
+
   export type AccountCreateNestedManyWithoutUserInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -12470,6 +12580,13 @@ export namespace Prisma {
     connectOrCreate?: BookmarkCreateOrConnectWithoutUserInput | BookmarkCreateOrConnectWithoutUserInput[]
     createMany?: BookmarkCreateManyUserInputEnvelope
     connect?: BookmarkWhereUniqueInput | BookmarkWhereUniqueInput[]
+  }
+
+  export type TestUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<TestCreateWithoutUserInput, TestUncheckedCreateWithoutUserInput> | TestCreateWithoutUserInput[] | TestUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: TestCreateOrConnectWithoutUserInput | TestCreateOrConnectWithoutUserInput[]
+    createMany?: TestCreateManyUserInputEnvelope
+    connect?: TestWhereUniqueInput | TestWhereUniqueInput[]
   }
 
   export type AccountUncheckedCreateNestedManyWithoutUserInput = {
@@ -12524,6 +12641,20 @@ export namespace Prisma {
     update?: BookmarkUpdateWithWhereUniqueWithoutUserInput | BookmarkUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: BookmarkUpdateManyWithWhereWithoutUserInput | BookmarkUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: BookmarkScalarWhereInput | BookmarkScalarWhereInput[]
+  }
+
+  export type TestUpdateManyWithoutUserNestedInput = {
+    create?: XOR<TestCreateWithoutUserInput, TestUncheckedCreateWithoutUserInput> | TestCreateWithoutUserInput[] | TestUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: TestCreateOrConnectWithoutUserInput | TestCreateOrConnectWithoutUserInput[]
+    upsert?: TestUpsertWithWhereUniqueWithoutUserInput | TestUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: TestCreateManyUserInputEnvelope
+    set?: TestWhereUniqueInput | TestWhereUniqueInput[]
+    disconnect?: TestWhereUniqueInput | TestWhereUniqueInput[]
+    delete?: TestWhereUniqueInput | TestWhereUniqueInput[]
+    connect?: TestWhereUniqueInput | TestWhereUniqueInput[]
+    update?: TestUpdateWithWhereUniqueWithoutUserInput | TestUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: TestUpdateManyWithWhereWithoutUserInput | TestUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: TestScalarWhereInput | TestScalarWhereInput[]
   }
 
   export type AccountUpdateManyWithoutUserNestedInput = {
@@ -12582,6 +12713,20 @@ export namespace Prisma {
     deleteMany?: BookmarkScalarWhereInput | BookmarkScalarWhereInput[]
   }
 
+  export type TestUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<TestCreateWithoutUserInput, TestUncheckedCreateWithoutUserInput> | TestCreateWithoutUserInput[] | TestUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: TestCreateOrConnectWithoutUserInput | TestCreateOrConnectWithoutUserInput[]
+    upsert?: TestUpsertWithWhereUniqueWithoutUserInput | TestUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: TestCreateManyUserInputEnvelope
+    set?: TestWhereUniqueInput | TestWhereUniqueInput[]
+    disconnect?: TestWhereUniqueInput | TestWhereUniqueInput[]
+    delete?: TestWhereUniqueInput | TestWhereUniqueInput[]
+    connect?: TestWhereUniqueInput | TestWhereUniqueInput[]
+    update?: TestUpdateWithWhereUniqueWithoutUserInput | TestUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: TestUpdateManyWithWhereWithoutUserInput | TestUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: TestScalarWhereInput | TestScalarWhereInput[]
+  }
+
   export type AccountUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -12608,6 +12753,12 @@ export namespace Prisma {
     update?: SessionUpdateWithWhereUniqueWithoutUserInput | SessionUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: SessionUpdateManyWithWhereWithoutUserInput | SessionUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: SessionScalarWhereInput | SessionScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutTestsInput = {
+    create?: XOR<UserCreateWithoutTestsInput, UserUncheckedCreateWithoutTestsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTestsInput
+    connect?: UserWhereUniqueInput
   }
 
   export type AttemptCreateNestedManyWithoutTestInput = {
@@ -12644,6 +12795,14 @@ export namespace Prisma {
     decrement?: number
     multiply?: number
     divide?: number
+  }
+
+  export type UserUpdateOneRequiredWithoutTestsNestedInput = {
+    create?: XOR<UserCreateWithoutTestsInput, UserUncheckedCreateWithoutTestsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTestsInput
+    upsert?: UserUpsertWithoutTestsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutTestsInput, UserUpdateWithoutTestsInput>, UserUncheckedUpdateWithoutTestsInput>
   }
 
   export type AttemptUpdateManyWithoutTestNestedInput = {
@@ -13135,6 +13294,40 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type TestCreateWithoutUserInput = {
+    id?: string
+    title: string
+    description: string
+    timeLimit: number
+    schemaVersion: string
+    rawJson: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    attempts?: AttemptCreateNestedManyWithoutTestInput
+    bookmarks?: BookmarkCreateNestedManyWithoutTestInput
+  }
+
+  export type TestUncheckedCreateWithoutUserInput = {
+    id?: string
+    title: string
+    description: string
+    timeLimit: number
+    schemaVersion: string
+    rawJson: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    attempts?: AttemptUncheckedCreateNestedManyWithoutTestInput
+    bookmarks?: BookmarkUncheckedCreateNestedManyWithoutTestInput
+  }
+
+  export type TestCreateOrConnectWithoutUserInput = {
+    where: TestWhereUniqueInput
+    create: XOR<TestCreateWithoutUserInput, TestUncheckedCreateWithoutUserInput>
+  }
+
+  export type TestCreateManyUserInputEnvelope = {
+    data: TestCreateManyUserInput | TestCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type AccountCreateWithoutUserInput = {
     id?: string
     type: string
@@ -13253,6 +13446,36 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Bookmark"> | Date | string
   }
 
+  export type TestUpsertWithWhereUniqueWithoutUserInput = {
+    where: TestWhereUniqueInput
+    update: XOR<TestUpdateWithoutUserInput, TestUncheckedUpdateWithoutUserInput>
+    create: XOR<TestCreateWithoutUserInput, TestUncheckedCreateWithoutUserInput>
+  }
+
+  export type TestUpdateWithWhereUniqueWithoutUserInput = {
+    where: TestWhereUniqueInput
+    data: XOR<TestUpdateWithoutUserInput, TestUncheckedUpdateWithoutUserInput>
+  }
+
+  export type TestUpdateManyWithWhereWithoutUserInput = {
+    where: TestScalarWhereInput
+    data: XOR<TestUpdateManyMutationInput, TestUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type TestScalarWhereInput = {
+    AND?: TestScalarWhereInput | TestScalarWhereInput[]
+    OR?: TestScalarWhereInput[]
+    NOT?: TestScalarWhereInput | TestScalarWhereInput[]
+    id?: StringFilter<"Test"> | string
+    userId?: StringFilter<"Test"> | string
+    title?: StringFilter<"Test"> | string
+    description?: StringFilter<"Test"> | string
+    timeLimit?: IntFilter<"Test"> | number
+    schemaVersion?: StringFilter<"Test"> | string
+    rawJson?: JsonFilter<"Test">
+    createdAt?: DateTimeFilter<"Test"> | Date | string
+  }
+
   export type AccountUpsertWithWhereUniqueWithoutUserInput = {
     where: AccountWhereUniqueInput
     update: XOR<AccountUpdateWithoutUserInput, AccountUncheckedUpdateWithoutUserInput>
@@ -13313,6 +13536,33 @@ export namespace Prisma {
     expires?: DateTimeFilter<"Session"> | Date | string
   }
 
+  export type UserCreateWithoutTestsInput = {
+    id?: string
+    email: string
+    name?: string | null
+    createdAt?: Date | string
+    attempts?: AttemptCreateNestedManyWithoutUserInput
+    bookmarks?: BookmarkCreateNestedManyWithoutUserInput
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutTestsInput = {
+    id?: string
+    email: string
+    name?: string | null
+    createdAt?: Date | string
+    attempts?: AttemptUncheckedCreateNestedManyWithoutUserInput
+    bookmarks?: BookmarkUncheckedCreateNestedManyWithoutUserInput
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutTestsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutTestsInput, UserUncheckedCreateWithoutTestsInput>
+  }
+
   export type AttemptCreateWithoutTestInput = {
     id?: string
     score: number
@@ -13371,6 +13621,39 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type UserUpsertWithoutTestsInput = {
+    update: XOR<UserUpdateWithoutTestsInput, UserUncheckedUpdateWithoutTestsInput>
+    create: XOR<UserCreateWithoutTestsInput, UserUncheckedCreateWithoutTestsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutTestsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutTestsInput, UserUncheckedUpdateWithoutTestsInput>
+  }
+
+  export type UserUpdateWithoutTestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attempts?: AttemptUpdateManyWithoutUserNestedInput
+    bookmarks?: BookmarkUpdateManyWithoutUserNestedInput
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutTestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attempts?: AttemptUncheckedUpdateManyWithoutUserNestedInput
+    bookmarks?: BookmarkUncheckedUpdateManyWithoutUserNestedInput
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+  }
+
   export type AttemptUpsertWithWhereUniqueWithoutTestInput = {
     where: AttemptWhereUniqueInput
     update: XOR<AttemptUpdateWithoutTestInput, AttemptUncheckedUpdateWithoutTestInput>
@@ -13411,11 +13694,13 @@ export namespace Prisma {
     schemaVersion: string
     rawJson: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
+    user: UserCreateNestedOneWithoutTestsInput
     bookmarks?: BookmarkCreateNestedManyWithoutTestInput
   }
 
   export type TestUncheckedCreateWithoutAttemptsInput = {
     id?: string
+    userId: string
     title: string
     description: string
     timeLimit: number
@@ -13436,6 +13721,7 @@ export namespace Prisma {
     name?: string | null
     createdAt?: Date | string
     bookmarks?: BookmarkCreateNestedManyWithoutUserInput
+    tests?: TestCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
   }
@@ -13446,6 +13732,7 @@ export namespace Prisma {
     name?: string | null
     createdAt?: Date | string
     bookmarks?: BookmarkUncheckedCreateNestedManyWithoutUserInput
+    tests?: TestUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
   }
@@ -13502,11 +13789,13 @@ export namespace Prisma {
     schemaVersion?: StringFieldUpdateOperationsInput | string
     rawJson?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutTestsNestedInput
     bookmarks?: BookmarkUpdateManyWithoutTestNestedInput
   }
 
   export type TestUncheckedUpdateWithoutAttemptsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     timeLimit?: IntFieldUpdateOperationsInput | number
@@ -13533,6 +13822,7 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     bookmarks?: BookmarkUpdateManyWithoutUserNestedInput
+    tests?: TestUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
   }
@@ -13543,6 +13833,7 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     bookmarks?: BookmarkUncheckedUpdateManyWithoutUserNestedInput
+    tests?: TestUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -13646,6 +13937,7 @@ export namespace Prisma {
     name?: string | null
     createdAt?: Date | string
     attempts?: AttemptCreateNestedManyWithoutUserInput
+    tests?: TestCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
   }
@@ -13656,6 +13948,7 @@ export namespace Prisma {
     name?: string | null
     createdAt?: Date | string
     attempts?: AttemptUncheckedCreateNestedManyWithoutUserInput
+    tests?: TestUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
   }
@@ -13673,11 +13966,13 @@ export namespace Prisma {
     schemaVersion: string
     rawJson: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
+    user: UserCreateNestedOneWithoutTestsInput
     attempts?: AttemptCreateNestedManyWithoutTestInput
   }
 
   export type TestUncheckedCreateWithoutBookmarksInput = {
     id?: string
+    userId: string
     title: string
     description: string
     timeLimit: number
@@ -13709,6 +14004,7 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attempts?: AttemptUpdateManyWithoutUserNestedInput
+    tests?: TestUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
   }
@@ -13719,6 +14015,7 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attempts?: AttemptUncheckedUpdateManyWithoutUserNestedInput
+    tests?: TestUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -13742,11 +14039,13 @@ export namespace Prisma {
     schemaVersion?: StringFieldUpdateOperationsInput | string
     rawJson?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutTestsNestedInput
     attempts?: AttemptUpdateManyWithoutTestNestedInput
   }
 
   export type TestUncheckedUpdateWithoutBookmarksInput = {
     id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     timeLimit?: IntFieldUpdateOperationsInput | number
@@ -13763,6 +14062,7 @@ export namespace Prisma {
     createdAt?: Date | string
     attempts?: AttemptCreateNestedManyWithoutUserInput
     bookmarks?: BookmarkCreateNestedManyWithoutUserInput
+    tests?: TestCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
   }
 
@@ -13773,6 +14073,7 @@ export namespace Prisma {
     createdAt?: Date | string
     attempts?: AttemptUncheckedCreateNestedManyWithoutUserInput
     bookmarks?: BookmarkUncheckedCreateNestedManyWithoutUserInput
+    tests?: TestUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -13799,6 +14100,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attempts?: AttemptUpdateManyWithoutUserNestedInput
     bookmarks?: BookmarkUpdateManyWithoutUserNestedInput
+    tests?: TestUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
   }
 
@@ -13809,6 +14111,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attempts?: AttemptUncheckedUpdateManyWithoutUserNestedInput
     bookmarks?: BookmarkUncheckedUpdateManyWithoutUserNestedInput
+    tests?: TestUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
   }
 
@@ -13819,6 +14122,7 @@ export namespace Prisma {
     createdAt?: Date | string
     attempts?: AttemptCreateNestedManyWithoutUserInput
     bookmarks?: BookmarkCreateNestedManyWithoutUserInput
+    tests?: TestCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
   }
 
@@ -13829,6 +14133,7 @@ export namespace Prisma {
     createdAt?: Date | string
     attempts?: AttemptUncheckedCreateNestedManyWithoutUserInput
     bookmarks?: BookmarkUncheckedCreateNestedManyWithoutUserInput
+    tests?: TestUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -13855,6 +14160,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attempts?: AttemptUpdateManyWithoutUserNestedInput
     bookmarks?: BookmarkUpdateManyWithoutUserNestedInput
+    tests?: TestUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
   }
 
@@ -13865,6 +14171,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attempts?: AttemptUncheckedUpdateManyWithoutUserNestedInput
     bookmarks?: BookmarkUncheckedUpdateManyWithoutUserNestedInput
+    tests?: TestUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
   }
 
@@ -13883,6 +14190,16 @@ export namespace Prisma {
     id?: string
     testId: string
     questionId: string
+    createdAt?: Date | string
+  }
+
+  export type TestCreateManyUserInput = {
+    id?: string
+    title: string
+    description: string
+    timeLimit: number
+    schemaVersion: string
+    rawJson: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
   }
 
@@ -13959,6 +14276,40 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     testId?: StringFieldUpdateOperationsInput | string
     questionId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TestUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    timeLimit?: IntFieldUpdateOperationsInput | number
+    schemaVersion?: StringFieldUpdateOperationsInput | string
+    rawJson?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attempts?: AttemptUpdateManyWithoutTestNestedInput
+    bookmarks?: BookmarkUpdateManyWithoutTestNestedInput
+  }
+
+  export type TestUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    timeLimit?: IntFieldUpdateOperationsInput | number
+    schemaVersion?: StringFieldUpdateOperationsInput | string
+    rawJson?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attempts?: AttemptUncheckedUpdateManyWithoutTestNestedInput
+    bookmarks?: BookmarkUncheckedUpdateManyWithoutTestNestedInput
+  }
+
+  export type TestUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    timeLimit?: IntFieldUpdateOperationsInput | number
+    schemaVersion?: StringFieldUpdateOperationsInput | string
+    rawJson?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

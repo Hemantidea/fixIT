@@ -129,6 +129,7 @@ exports.Prisma.UserScalarFieldEnum = {
 
 exports.Prisma.TestScalarFieldEnum = {
   id: 'id',
+  userId: 'userId',
   title: 'title',
   description: 'description',
   timeLimit: 'timeLimit',

@@ -19,18 +19,21 @@ model User {
   createdAt DateTime   @default(now())
   attempts  Attempt[]
   bookmarks Bookmark[]
+  tests     Test[]  
   accounts  Account[]
   sessions  Session[]
 }
 
 model Test {
   id            String     @id @default(uuid())
+  userId        String     // Foreign key linking to the creator User
   title         String
   description   String
   timeLimit     Int        // in minutes
   schemaVersion String
   rawJson       Json       // Natively stores verified test payload as PostgreSQL JSON
   createdAt     DateTime   @default(now())
+  user          User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   attempts      Attempt[]
   bookmarks     Bookmark[]
 }
